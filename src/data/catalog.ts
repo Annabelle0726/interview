@@ -2,20 +2,22 @@ import imported from './questions.json';
 import supplement from './supplement.json';
 import fullstack from './fullstack.json';
 import spokenAnswers from './spoken-answers.json';
+import vibeCoding from './vibe-coding.json';
 import type {Block, Question} from '../types';
 
-const answers: Record<string, Pick<Question, 'spoken' | 'followups'> & {links?: Question['links']}> = spokenAnswers;
-export const questions: Question[] = [...supplement, ...imported, ...fullstack].map(source => {
+const answers: Record<string, Pick<Question, 'spoken' | 'followups'> & {links?: Question['links'];attention?:string}> = spokenAnswers;
+const coreQuestions: Question[] = [...supplement, ...imported, ...fullstack].map(source => {
  const answer = answers[source.id];
  if (!answer) throw new Error('缺少面试回答 ' + source.id);
  const examples = source.blocks.filter(block => block.type !== 'p') as Block[];
  return {...source, ...answer, priority: source.priority as Question['priority'], blocks: examples,
   links: [...source.links, ...(answer.links ?? [])]};
 });
+export const questions: Question[] = [...coreQuestions,...vibeCoding.map(q=>({...q,priority:q.priority as Question['priority'],blocks:q.blocks as Block[]}))];
 export const categories=[
  {id:'intro',name:'自我介绍',hint:'按岗位表达自己的优势'},
  {id:'product',name:'业务与产品判断',hint:'问题、取舍和验证'},
- {id:'ai-coding',name:'AI Coding 与开发流程',hint:'AI 协作、TDD / SDD / BDD'},
+ {id:'ai-coding',name:'Vibe Coding 与工程流程',hint:'Agent 派工、Skills、TDD / SDD / BDD'},
  {id:'python',name:'Python 后端',hint:'本岗位的技术准备重点'},
  {id:'frontend',name:'React / Vue 前端',hint:'状态、异步与交互'},
  {id:'database',name:'数据库与存储',hint:'查询、事务、缓存与安全'},
@@ -28,6 +30,7 @@ export const categories=[
 ];
 export const priorities={P0:{label:'优先准备',description:'川下核心筛选条件，或可证明个人能力的关键案例。'},P1:{label:'需要讲清',description:'常见追问与已有经历，理解后用例子回答。'},P2:{label:'了解即可',description:'当前岗位加分或次要内容，不挤占 Python 与项目准备时间。'}};
 export const routes=[
+ {title:'Vibe Coding · 简历与实战',time:'30 分钟',detail:'先把 HR 要看的 Python 与 Vibe Coding 写进简历，再练 Agent 派工、Skills 和工程方法。',ids:['v01','s01','v02','v03','v04','v06']},
  {title:'01 · 先把自己讲清楚',time:'20 分钟',detail:'用 Python 项目介绍自己，再讲后端实现和 AI 协作方法。',ids:['s01','s20','c07','s04']},
  {title:'02 · 拿出工程判断',time:'30 分钟',detail:'从数据建模、项目规格、Agent Skills 到代码审查讲清技术判断。',ids:['s08','s02','a13','a12','s24','s03']},
  {title:'03 · 准备后端实战',time:'40 分钟',detail:'优先解决异步、接口权限、查询和故障排查。',ids:['s23','c06','s21','c07','s05','d04','s06']},
@@ -37,15 +40,15 @@ export const routes=[
 export const company={name:'川下科技',fullName:'深圳市川下科技有限公司',role:'Vibe Coding · Python / Go 开发',salary:'1–2 万 / 月 · 13 薪',location:'居家远程 · 招聘地点深圳',updated:'2026-11-02',
  description:'招聘介绍涉及自研项目及网站、App、小程序等开发服务，表述中也包含外包业务。自研与客户交付的实际占比、行业客户和项目周期仍需面试确认。',
  facts:[['公司规模','招聘页标注 20–99 人、未融资、软件 / IT 服务'],['学历','本科及以上，计算机相关专业'],['经验','页面标注 1–3 年；任职要求正文写 3 年以上，存在不一致'],['工作地点','深圳南山区田厦金牛广场 A 座 1702；HR 已确认岗位居家远程'],['成立信息','招聘页标注 2023-02-28 成立、注册资本 200 万元；未独立核验工商现状'],['业务方向','业务服务、平台工具、自动化系统；具体在研产品待沟通']],
- hr:'HR 沟通要点：岗位支持居家远程；面试官重视传统开发经验、Python 或 Go 至少一门，以及日常 Vibe Coding 的实际使用情况，希望简历能体现。',
+ hr:'HR 明确要求：这是远程居家办公岗位，需要传统开发经验，Python / Go 至少精通一种，并且熟练使用 Vibe Coding。**简历必须突出 Python 实际项目与 Vibe Coding 工作方式，这是面试官重点看的内容。**',
  requirements:[
  {skill:'Python / Go 至少一门',type:'必备',judgment:'用 Bloom 的 FastAPI / SQLAlchemy、模型接入和 Belay 的事务 / worker 说明实际开发能力。Library 当前为 React / Supabase / TypeScript；Go 按基础了解表达。',match:'重点证明',ids:['s01','s20','c07','c06','s21','s23','c11','c12']},
- {skill:'AI Coding 日常实践',type:'必备',judgment:'ChatGPT、Codex 与 Agent Skills 参与讨论、实现和验证；重点讲自己怎样定规则、选方案和检查输出。',match:'已有经历',ids:['s04','a02','a03','a12','a14']},
- {skill:'TDD / SDD / BDD',type:'必备',judgment:'已有测试、需求与契约实践；严格 TDD 流程还需用实际记录说明，不能只背定义。',match:'优先补证据',ids:['s02','s03']},
- {skill:'数据库与存储',type:'必备',judgment:'关系模型与 SQL 先讲清，再说明缓存一致性与选型。课程操作和生产经验要区分。',match:'分层准备',ids:['s05','d04','d06','d08']},
- {skill:'Linux 与问题定位',type:'必备',judgment:'至少讲出服务无法访问的排查顺序，知道每条命令要验证什么。',match:'实操补强',ids:['s06','s07','d11','d13']},
- {skill:'工程质量、接口、Git、协作',type:'必备',judgment:'用 Belay 的 Provider、预算事务和持久任务，以及 Bloom 的上下文与记忆模型说明；准备一段可解释的代码。',match:'已有材料',ids:['s08','s10','s20','s24','b16']},
- {skill:'LLM / RAG / Agent',type:'加分',judgment:'文若可体现平台定制与业务评估；平台原有能力与本人贡献分开。',match:'可突出',ids:['s13','s14','s15','s16','s17']},
+ {skill:'Vibe Coding 与 Agent 工作流',type:'必备',judgment:'**ChatGPT / Codex 日常协作 + Agent Skills**：把任务规格、上下文、修改边界、分步实现、独立 Review 与验证讲成一个完整案例。简历先写出来，面试再展示。',match:'HR 重点',ids:['v01','s04','v02','v03','v05','a13']},
+ {skill:'TDD / SDD / BDD',type:'必备',judgment:'**规格 → 业务场景 → 测试 → 实现 → Review**。用同一项改动展示规格、断言、diff 和结果；TDD 进一步解释先失败、后实现的顺序。',match:'核心实战',ids:['v04','s02','s03']},
+ {skill:'数据库与存储',type:'必备',judgment:'先讲 **SQLAlchemy、SQLite / PostgreSQL、关系建模与事务** 的项目实践，再解释 MySQL、Redis、MongoDB 的选型和缓存一致性。',match:'分层准备',ids:['s05','d04','d06','d08']},
+ {skill:'Linux 与问题定位',type:'必备',judgment:'讲清 **现象 → 监听 / 进程 → 日志 → 依赖与入口**；curl、ss、进程与容器命令各验证什么，最后回到原入口复测。',match:'实操补强',ids:['s06','s07','d11','d13']},
+ {skill:'工程质量、接口、Git、协作',type:'必备',judgment:'用 **Provider 依赖隔离、预算事务、接口模型与小步 Git diff** 说明代码组织；远程交付写清提交、验证、待决策事项和下一步。',match:'已有材料',ids:['s08','s10','v05','s20','s24','b16']},
+ {skill:'LLM / RAG / Agent',type:'加分',judgment:'先讲 **Bloom 的模型接入、上下文与用户确认规则**，再讲 Belay 的 Provider 与任务处理；文若补充 RAG 评估。',match:'项目加分',ids:['s20','c06','c07','s13','s14','s15','s16']},
  {skill:'DDD / Clean / Hexagonal',type:'加分',judgment:'能解释业务边界与依赖方向即可；没有实施证据不说全面落地。',match:'理解即可',ids:['s09','d14']},
  {skill:'跨语言、DevOps、CI/CD、K8s',type:'加分',judgment:'了解交付闭环和拆服务代价，现阶段不优先深挖集群细节。',match:'次优先级',ids:['s11','s12','c08','c09','c10']},
  {skill:'开源贡献 / 技术写作',type:'加分',judgment:'可以展示二次开发与文档；只有向上游提交的贡献才能按上游贡献表述。',match:'核对证据',ids:['s17','e02']}

@@ -9,3 +9,13 @@
 .followup-pair { margin: 1.15rem 0; padding-left: 1rem; border-left: 2px solid #cbd9e5; }
 .followup-pair h3 { margin: 0 0 .35rem; color: #223f56; }
 .followup-pair p { border: 0; padding: 0; color: #3d5264; line-height: 1.85; }
+.answer p strong,.followup-pair p strong,.focus-box li strong,.requirement p strong { color:#173959; font-weight:700; }
+.interview-attention { margin:0 0 24px; padding:16px 20px; border:1px solid #ebcdca; border-radius:6px; background:#fff5f3; color:#963a31; }
+.interview-attention>strong { font-size:12px; font-weight:700; }
+.interview-attention p { margin:6px 0 0; font-size:14px; line-height:1.9; color:#963a31; overflow-wrap:anywhere; }
+.interview-attention p strong { font-weight:700; }
+.hr-emphasis { color:#963a31; border-left-color:#c8897e; }
+.hr-emphasis strong { font-weight:700; }
+.editor-hint { display:block; color:#607487; font-size:12px; }
+.focus-box p strong,.focus-box li strong { font-size:inherit; }
+@media(max-width:760px) { .interview-attention { padding:14px 17px; } .interview-attention p { font-size:13px; } }

@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {ArrowLeft,ArrowRight,Star,ChevronDown,Copy,Check,BookOpen,MessageSquare} from 'lucide-react';
 import type {Question,Block,RecordState} from './types';
 import {priorities,categories} from './data/catalog';
+import {Emphasis} from './Emphasis';
 export function Blocks({blocks}:{blocks:Block[]}){
  return <>{blocks.map((b,i)=>b.type==='code'?<Code key={i} text={b.text||''}/>:b.type==='table'?<div className="table-scroll" key={i}><table><tbody>{b.rows?.map((r,n)=><tr key={n}>{r.map((c,k)=>n===0?<th key={k}>{c}</th>:<td key={k}>{c}</td>)}</tr>)}</tbody></table></div>:<p key={i}>{b.text}</p>)}</>;
 }
@@ -15,7 +16,7 @@ function SpokenAnswer({q, record, onChange}:{q:Question; record:RecordState; onC
  const answer = record.answerDraft?.trim() ? record.answerDraft : standard;
  const [editing,setEditing] = useState(false);
  const [draft,setDraft] = useState('');
- const heading = q.id.startsWith('e') ? '我会这样问' : '面试时我会这样答';
+ const heading = q.id==='v01' ? '简历可以这样写' : q.id.startsWith('e') ? '我会这样问' : '面试时我会这样答';
  function save() {
   const text = draft.trim();
   if (!text) return;
@@ -31,7 +32,7 @@ function SpokenAnswer({q, record, onChange}:{q:Question; record:RecordState; onC
    <div className="actions"><button className="primary" disabled={!draft.trim()} onClick={save}>保存回答</button>
     <button onClick={()=>setEditing(false)}>取消</button>
     {record.answerDraft && <button onClick={()=>setDraft(standard)}>载入参考稿</button>}
-   </div></> : answer.split(/\n\s*\n/).map((p,i)=><p key={i}>{p}</p>)}
+   </div><small className="editor-hint">用 **词句** 标记加粗重点，保存后显示。</small></> : answer.split(/\n\s*\n/).map((p,i)=><p key={i}><Emphasis text={p}/></p>)}
   {q.blocks.length>0 && <div className="answer-examples"><h3>代码与例子</h3><Blocks blocks={q.blocks}/></div>}
  </section>;
 }
@@ -42,10 +43,11 @@ export default function QuestionView({q,record,onChange,backLabel,onBack,onNext,
   <div className="eyebrow">{categories.find(c=>c.id===q.category)?.name} <span> / {q.id.toUpperCase()}</span></div>
   <h1>{q.title}</h1>
   <div className="question-meta"><span className={'badge '+q.priority}>{q.priority} · {priorities[q.priority].label}</span><span className="muted">{q.source}</span></div>
-  <div className="focus-box"><strong>这题重点</strong><p>{q.summary}</p><ul>{q.focus.map(f=><li key={f}>{f}</li>)}</ul></div>
+  <div className="focus-box"><strong>这题重点</strong><p><Emphasis text={q.summary}/></p><ul>{q.focus.map(f=><li key={f}><Emphasis text={f}/></li>)}</ul></div>
+  {q.attention && <aside className="interview-attention" aria-label="面试重点"><strong>面试重点</strong><p><Emphasis text={q.attention}/></p></aside>}
   <div className="reader-toolbar"><div className="segmented" aria-label="学习模式"><button className={!practice?'selected':''} onClick={()=>setPractice(false)}><BookOpen size={15}/> 阅读</button><button className={practice?'selected':''} onClick={()=>{setPractice(true);setReveal(false);}}><MessageSquare size={15}/> 自测</button></div><button className={'star-button '+(record.starred?'active':'')} onClick={()=>onChange({...record,starred:!record.starred})} aria-pressed={record.starred}><Star size={16} fill={record.starred?'currentColor':'none'}/>{record.starred?'已收藏':'收藏这题'}</button></div>
   {practice&&!reveal?<div className="practice-box"><h2>先用自己的话讲一分钟</h2><p>按“问题 → 判断依据 → 做法 → 验证”回答。遇到假设场景，用“我会”表达。</p><button className="primary" onClick={()=>setReveal(true)}>查看参考回答 <ChevronDown size={16}/></button></div>:<SpokenAnswer q={q} record={record} onChange={onChange}/>}
-  {(!practice||reveal)&&<><section className="followups"><h2>继续追问</h2>{q.followups.map(f=><div className="followup-pair" key={f.prompt}><h3>{f.prompt}</h3><p>{f.answer}</p>{f.code && <Code text={f.code}/>}</div>)}</section><div className="boundary"><strong>表达边界</strong><p>{q.boundary}</p></div>{q.links.length>0&&<div className="sources"><span>延伸阅读</span>{q.links.map(l=><a key={l.url} href={l.url} target="_blank" rel="noreferrer">{l.title} ↗</a>)}</div>}</>}
+  {(!practice||reveal)&&<><section className="followups"><h2>继续追问</h2>{q.followups.map(f=><div className="followup-pair" key={f.prompt}><h3>{f.prompt}</h3><p><Emphasis text={f.answer}/></p>{f.code && <Code text={f.code}/>}</div>)}</section><div className="boundary"><strong>表达边界</strong><p><Emphasis text={q.boundary}/></p></div>{q.links.length>0&&<div className="sources"><span>延伸阅读</span>{q.links.map(l=><a key={l.url} href={l.url} target="_blank" rel="noreferrer">{l.title} ↗</a>)}</div>}</>}
   <section className="my-notes"><div className="section-title"><h2>个人笔记（选填）</h2><label className="status-label">掌握程度 <select aria-label="掌握程度" value={record.status} onChange={e=>onChange({...record,status:e.target.value as RecordState['status']})}><option value="new">未开始</option><option value="review">待复习</option><option value="mastered">已掌握</option></select></label></div><textarea aria-label="个人笔记" placeholder="可以记下演示链接、代码位置或你想再练一次的地方。" maxLength={50000} value={record.note} onChange={e=>onChange({...record,note:e.target.value})}/><small>记录保存在当前浏览器；重要内容请定期导出备份。</small></section>
   <div className="question-pagination"><button disabled={index<=0} onClick={onPrev}><ArrowLeft size={16}/> 上一题</button><button disabled={index>=total-1} onClick={onNext}>下一题 <ArrowRight size={16}/></button></div>
  </article>;

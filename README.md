@@ -17,11 +17,13 @@
 
 一个围绕目标岗位组织知识、回答与项目经历的个人面试工作台。将原始手册、岗位补充、全栈模拟和项目表达放在一起，支持自测、修改口述回答、记录笔记与复习进度。
 
-**91 道练习 · 118 个有回答的追问 · 12 个主题 · 4 个项目**
+**97 道练习 · 135 个有回答的追问 · 12 个主题 · 4 个项目**
 
 覆盖 Python 后端、React / Vue、数据库、Linux、RAG / Agent、AI Coding 与架构交付；包含川下科技岗位专项。公司资料依据所提供的 JD 与 HR 沟通整理，资料日期为 **2026-11-02**。
 
 ## 怎样练习
+
+**HR 重点：Python 后端开发 + Vibe Coding。** 首页新增“Vibe Coding · 简历与实战”，覆盖简历表达、Agent 派工、Skills、TDD / SDD / BDD、协作 Review 与现场演示。正文加粗标出能力与动作，红色提示标出面试前应准备的证据。
 
 | 想完成的事 | 在手册里怎么做 |
 | --- | --- |
@@ -70,6 +72,7 @@ npm run dev
 
 Python 与项目回答依据实际源码整理，具体实现与可展示材料见 [项目代码与面试表达依据](docs/project-evidence.md)。
 
+- `src/data/vibe-coding.json`：6 道 Vibe Coding 专题，含简历表达、Agent 工作流和红色重点提示。
 - `src/data/spoken-answers.json`：按题号保存面试口述稿、全部追问与答复。重新导入原手册不会覆盖口述稿。
 - `src/data/fullstack.json`：本轮新增的登录、隔离和文件上传题。全栈八题的练习顺序在首页第五组。
 - `src/data/questions.json`：上传手册的完整主问题、回答、代码和题内表格。

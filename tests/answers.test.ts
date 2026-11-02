@@ -8,8 +8,9 @@ function readData(name:string) {
 }
 
 test('every question has its own spoken answer and replies to every original follow-up',()=>{
- const cards=[...readData('questions'),...readData('supplement'),...readData('fullstack')];
- const answers=readData('spoken-answers');
+ const vibe=readData('vibe-coding');
+ const cards=[...readData('questions'),...readData('supplement'),...readData('fullstack'),...vibe];
+ const answers={...readData('spoken-answers'),...Object.fromEntries(vibe.map((card:{id:string})=>[card.id,card]))};
  assert.equal(new Set(cards.map(card=>card.id)).size,cards.length);
  assert.deepEqual(Object.keys(answers).sort(),cards.map(card=>card.id).sort());
  for(const card of cards) {
@@ -21,7 +22,8 @@ test('every question has its own spoken answer and replies to every original fol
    return pair.prompt;
   }));
   for(const original of card.followups) {
-   assert.ok(prompts.has(original.replace(/^(面试官追问|考官可能追问|考官追问)[ ：:]*/,'')),card.id);
+   const prompt=typeof original==='string' ? original : original.prompt;
+   assert.ok(prompts.has(prompt.replace(/^(面试官追问|考官可能追问|考官追问)[ ：:]*/,'')),card.id);
   }
  }
 });
