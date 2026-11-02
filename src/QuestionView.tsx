@@ -10,6 +10,31 @@ function Code({text}:{text:string}){
  async function copy(){try{await navigator.clipboard.writeText(text);setCopied(true);setTimeout(()=>setCopied(false),1600);}catch{setError(true);}}
  return <div className="code"><div className="code-head"><span>代码示例</span><button onClick={copy}>{copied?<Check size={14}/>:<Copy size={14}/>} {copied?'已复制':'复制'}</button></div><pre><code>{text}</code></pre>{error&&<small>复制不可用，请选中代码手动复制。</small>}</div>
 }
+function SpokenAnswer({q, record, onChange}:{q:Question; record:RecordState; onChange:(r:RecordState)=>void}) {
+ const standard = q.spoken.join('\n\n');
+ const answer = record.answerDraft?.trim() ? record.answerDraft : standard;
+ const [editing,setEditing] = useState(false);
+ const [draft,setDraft] = useState('');
+ const heading = q.id.startsWith('e') ? '我会这样问' : '面试时我会这样答';
+ function save() {
+  const text = draft.trim();
+  if (!text) return;
+  onChange({...record,answerDraft:text===standard ? undefined : text});
+  setEditing(false);
+ }
+ return <section className="answer">
+  <div className="section-title"><h2>{heading}</h2>
+   {!editing && <button onClick={()=>{setDraft(answer);setEditing(true);}}>编辑我的回答</button>}
+  </div>
+  {editing ? <>
+   <textarea autoFocus aria-label="我的口述稿" maxLength={50000} rows={9} value={draft} onChange={e=>setDraft(e.target.value)}/>
+   <div className="actions"><button className="primary" disabled={!draft.trim()} onClick={save}>保存回答</button>
+    <button onClick={()=>setEditing(false)}>取消</button>
+    {record.answerDraft && <button onClick={()=>setDraft(standard)}>载入参考稿</button>}
+   </div></> : answer.split(/\n\s*\n/).map((p,i)=><p key={i}>{p}</p>)}
+  {q.blocks.length>0 && <div className="answer-examples"><h3>代码与例子</h3><Blocks blocks={q.blocks}/></div>}
+ </section>;
+}
 export default function QuestionView({q,record,onChange,backLabel,onBack,onNext,onPrev,index,total}:{q:Question;record:RecordState;onChange:(r:RecordState)=>void;backLabel:string;onBack:()=>void;onNext:()=>void;onPrev:()=>void;index:number;total:number}){
  const [practice,setPractice]=useState(false),[reveal,setReveal]=useState(false);
  return <article className="question-view">
@@ -19,9 +44,9 @@ export default function QuestionView({q,record,onChange,backLabel,onBack,onNext,
   <div className="question-meta"><span className={'badge '+q.priority}>{q.priority} · {priorities[q.priority].label}</span><span className="muted">{q.source}</span></div>
   <div className="focus-box"><strong>这题重点</strong><p>{q.summary}</p><ul>{q.focus.map(f=><li key={f}>{f}</li>)}</ul></div>
   <div className="reader-toolbar"><div className="segmented" aria-label="学习模式"><button className={!practice?'selected':''} onClick={()=>setPractice(false)}><BookOpen size={15}/> 阅读</button><button className={practice?'selected':''} onClick={()=>{setPractice(true);setReveal(false);}}><MessageSquare size={15}/> 自测</button></div><button className={'star-button '+(record.starred?'active':'')} onClick={()=>onChange({...record,starred:!record.starred})} aria-pressed={record.starred}><Star size={16} fill={record.starred?'currentColor':'none'}/>{record.starred?'已收藏':'收藏这题'}</button></div>
-  {practice&&!reveal?<div className="practice-box"><h2>先用自己的话讲一分钟</h2><p>按“问题 → 判断依据 → 做法 → 验证”回答。遇到假设场景，用“我会”表达。</p><button className="primary" onClick={()=>setReveal(true)}>查看参考回答 <ChevronDown size={16}/></button></div>:<section className="answer"><h2>参考回答与知识要点</h2><Blocks blocks={q.blocks}/></section>}
-  {(!practice||reveal)&&<><section className="followups"><h2>继续追问</h2>{q.followups.length?q.followups.map((f,i)=><p key={i}>{f.replace(/^(面试官追问|考官可能追问|考官追问)[ ：:]*/,'')}</p>):<p>结合一个真实项目，你做了什么选择？有哪些结果或记录支持这个判断？</p>}</section><div className="boundary"><strong>表达边界</strong><p>{q.boundary}</p></div>{q.links.length>0&&<div className="sources"><span>延伸阅读</span>{q.links.map(l=><a key={l.url} href={l.url} target="_blank" rel="noreferrer">{l.title} ↗</a>)}</div>}</>}
-  <section className="my-notes"><div className="section-title"><h2>我的回答与证据</h2><label className="status-label">掌握程度 <select aria-label="掌握程度" value={record.status} onChange={e=>onChange({...record,status:e.target.value as RecordState['status']})}><option value="new">未开始</option><option value="review">待复习</option><option value="mastered">已掌握</option></select></label></div><textarea aria-label="我的回答与证据" placeholder="写下自己的回答、具体代码位置、演示链接或需要补充的真实经历……" maxLength={50000} value={record.note} onChange={e=>onChange({...record,note:e.target.value})}/><small>记录保存在当前浏览器；重要内容请定期导出备份。</small></section>
+  {practice&&!reveal?<div className="practice-box"><h2>先用自己的话讲一分钟</h2><p>按“问题 → 判断依据 → 做法 → 验证”回答。遇到假设场景，用“我会”表达。</p><button className="primary" onClick={()=>setReveal(true)}>查看参考回答 <ChevronDown size={16}/></button></div>:<SpokenAnswer q={q} record={record} onChange={onChange}/>}
+  {(!practice||reveal)&&<><section className="followups"><h2>继续追问</h2>{q.followups.map(f=><div className="followup-pair" key={f.prompt}><h3>{f.prompt}</h3><p>{f.answer}</p>{f.code && <Code text={f.code}/>}</div>)}</section><div className="boundary"><strong>表达边界</strong><p>{q.boundary}</p></div>{q.links.length>0&&<div className="sources"><span>延伸阅读</span>{q.links.map(l=><a key={l.url} href={l.url} target="_blank" rel="noreferrer">{l.title} ↗</a>)}</div>}</>}
+  <section className="my-notes"><div className="section-title"><h2>个人笔记（选填）</h2><label className="status-label">掌握程度 <select aria-label="掌握程度" value={record.status} onChange={e=>onChange({...record,status:e.target.value as RecordState['status']})}><option value="new">未开始</option><option value="review">待复习</option><option value="mastered">已掌握</option></select></label></div><textarea aria-label="个人笔记" placeholder="可以记下演示链接、代码位置或你想再练一次的地方。" maxLength={50000} value={record.note} onChange={e=>onChange({...record,note:e.target.value})}/><small>记录保存在当前浏览器；重要内容请定期导出备份。</small></section>
   <div className="question-pagination"><button disabled={index<=0} onClick={onPrev}><ArrowLeft size={16}/> 上一题</button><button disabled={index>=total-1} onClick={onNext}>下一题 <ArrowRight size={16}/></button></div>
  </article>;
 }

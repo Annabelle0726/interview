@@ -1383,7 +1383,7 @@
       },
       {
         "type": "code",
-        "text": "calculate = timer(calculate)"
+        "text": "# 与 @timer 等价的写法。若已使用装饰器，不再执行这一行。\ncalculate = timer(calculate)"
       },
       {
         "type": "p",

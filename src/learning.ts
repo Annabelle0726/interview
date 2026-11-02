@@ -23,7 +23,9 @@ export function parseBackup(s:string,_ids:string[]=[]):Progress{
  for(const [id,value] of Object.entries(v.records)){
   const r=value as RecordState;
   if(['__proto__','constructor','prototype'].includes(id)||!r||!['new','review','mastered'].includes(r.status)||typeof r.starred!=='boolean'||typeof r.note!=='string'||r.note.length>50000)throw new Error('备份记录格式有误，未导入。');
+  if(r.answerDraft!==undefined && (typeof r.answerDraft!=='string' || r.answerDraft.length>50000))throw new Error('口述稿格式有误，未导入。');
   records[id]={status:r.status,starred:r.starred,note:r.note};
+  if(r.answerDraft?.trim())records[id].answerDraft=r.answerDraft;
  }
  const signature=v.signature??'';
  if(typeof signature!=='string'||signature.length>2_000_000||(signature&&!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=\r\n]+$/.test(signature)))throw new Error('签名图片格式无效。');

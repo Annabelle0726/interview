@@ -1,42 +1,73 @@
-# Annabelle 的面试准备手册
+<p align="center">
+  <img src="public/favicon.svg" width="120" height="64" alt="Annabelle 的蓝金手写签名" />
+</p>
 
-本地 React + TypeScript + Vite 项目。88 道练习（上传手册 64 道、补充 24 道）、12 个主题、川下科技专项与 4 个项目。公司资料来自所提供的 JD 和 HR 沟通，以 2026-11-02 为整理日期。
+<h1 align="center">Annabelle 的面试准备手册</h1>
 
-## 直接使用：不需要安装软件
+<p align="center">把知识点练成能说出口的回答，把项目经历整理成有依据的表达。</p>
 
-将压缩包的内容解压至 `C:\Projects\interviews`，双击其中的 **interviews.html**。此文件包含 React、CSS、题库、作品集原版 SVG 签名和上传的 Word 原件，无需联网、无需服务器。单文件也可独立下载。浏览器或文件位置不同，学习记录可能分开保存；定期在“备份与签名”导出 JSON。
+<p align="center">
+  <a href="#立即开始">立即开始</a> ·
+  <a href="#怎样练习">怎样练习</a> ·
+  <a href="#本地开发">本地开发</a> ·
+  <a href="#内容维护">内容维护</a>
+</p>
 
-## 本地开发
+---
 
-使用 Node.js 22.13+ 或 Node.js 24。打开 CMD：
+一份可以离线使用的个人面试工作台。将原始手册、岗位补充、全栈模拟和项目表达放在一起，支持自测、修改口述回答、记录笔记与复习进度。
 
-```bat
-cd /d C:\Projects\interviews
+**91 道练习 · 118 个有回答的追问 · 12 个主题 · 4 个项目**
+
+覆盖 Python 后端、React / Vue、数据库、Linux、RAG / Agent、AI Coding 与架构交付；包含川下科技岗位专项。公司资料依据所提供的 JD 与 HR 沟通整理，资料日期为 **2026-11-02**。
+
+## 怎样练习
+
+| 想完成的事 | 在手册里怎么做 |
+| --- | --- |
+| 围绕岗位准备 | 从公司专项查看岗位要求，进入关联练习 |
+| 练习面试表达 | 打开题目，阅读口述稿和追问；用“自测”隐藏完整答案 |
+| 写出自己的版本 | 点击“编辑我的回答”，修改现成口述稿并补充个人笔记 |
+| 安排下一轮复习 | 收藏题目，标记“待复习”或“已掌握”，从概览继续上次阅读 |
+| 保留学习成果 | 导出 JSON 备份，在其他浏览器或使用方式中导入 |
+
+建议从自我介绍、Python 预算判断、AI 代码审查、TDD / SDD / BDD 和一个真实项目开始。按 **Ctrl / Cmd + K** 搜索问题、技能或项目。
+
+## 立即开始
+
+### 离线使用
+
+1. [下载整个仓库](https://github.com/Annabelle0726/interview/archive/refs/heads/main.zip)并解压。
+2. 双击根目录中的 **[interviews.html](interviews.html)**。
+3. 开始练习；定期在“备份与签名”中导出学习记录。
+
+独立 HTML 内嵌应用、样式、题库、签名图标和 Word 原件，打开时无需联网或启动服务器。也可以单独保存该 HTML 使用。
+
+学习记录保存在当前浏览器本地。更换浏览器、文件位置或从离线版切换到开发地址时，记录可能分开保存；迁移前先导出备份。
+
+### 本地开发
+
+需要 **Node.js 22.13+ 或 Node.js 24**；首次安装依赖需要联网。在项目目录运行：
+
+```sh
 npm ci
 npm run dev
 ```
 
-打开终端打印的 localhost 地址。首次安装依赖需要联网。为避免在不同来源之间切换导致看不到原学习记录，选定一种使用方式；需要迁移时导出/导入备份。
+打开终端显示的本地地址。
 
-```bat
-npm test
-npm run build
-npm run preview
-```
+| 命令 | 用途 |
+| --- | --- |
+| `npm test` | 检查学习记录、题库回答及备份相关逻辑 |
+| `npm run build` | TypeScript 检查，生成 `dist/` 与独立版 `interviews.html` |
+| `npm run preview` | 本地预览构建后的网页 |
 
-`build` 先进行 TypeScript 检查，再生成 `dist/` 和独立文件 `interviews.html`。
-
-## 使用建议
-
-1. 先打开“川下科技”，从每项岗位要求直接进入关联练习。
-2. 优先准备开发岗自我介绍、Python 预算判断练习、AI 代码审查、TDD/SDD/BDD 与一个真实项目。
-3. 在“我的项目库”优先梳理文若：个人定制、开源平台能力、Ragent 评估、尚未证实的业务假设分开。
-4. 打开题目，“自测”隐藏完整答案；在“我的回答与证据”中用自己的话练习。标记待复习或已掌握。
-5. Ctrl/Cmd+K 聚焦搜索。支持题干、正文、技能与项目检索。读过的最后一题可从概览继续。
-6. 原版签名取自个人作品集 `src/components/SectionHeader.jsx`，按原 viewBox、笔画与配色内嵌。可在设置页换成本机图片。
+采用 React 19、TypeScript、Vite 与 Lucide 图标。签名沿用个人作品集中的原始 SVG 笔画与蓝金配色，也用于网站 favicon。
 
 ## 内容维护
 
+- `src/data/spoken-answers.json`：按题号保存面试口述稿、全部追问与答复。重新导入原手册不会覆盖口述稿。
+- `src/data/fullstack.json`：本轮新增的登录、隔离和文件上传题。全栈八题的练习顺序在首页第五组。
 - `src/data/questions.json`：上传手册的完整主问题、回答、代码和题内表格。
 - `scripts/import_docx.py`：保留代码和附录的导入工具。仅重新导入时需要 Python 与 `python-docx`。
 - `src/data/supplement.json`、`scripts/supplement.py`：岗位与项目补充题及其编辑来源。

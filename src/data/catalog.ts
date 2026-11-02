@@ -1,7 +1,17 @@
 import imported from './questions.json';
 import supplement from './supplement.json';
-import type {Question} from '../types';
-export const questions=[...supplement,...imported] as Question[];
+import fullstack from './fullstack.json';
+import spokenAnswers from './spoken-answers.json';
+import type {Block, Question} from '../types';
+
+const answers: Record<string, Pick<Question, 'spoken' | 'followups'> & {links?: Question['links']}> = spokenAnswers;
+export const questions: Question[] = [...supplement, ...imported, ...fullstack].map(source => {
+ const answer = answers[source.id];
+ if (!answer) throw new Error('缺少面试回答 ' + source.id);
+ const examples = source.blocks.filter(block => block.type !== 'p') as Block[];
+ return {...source, ...answer, priority: source.priority as Question['priority'], blocks: examples,
+  links: [...source.links, ...(answer.links ?? [])]};
+});
 export const categories=[
  {id:'intro',name:'自我介绍',hint:'按岗位表达自己的优势'},
  {id:'product',name:'业务与产品判断',hint:'问题、取舍和验证'},
@@ -21,7 +31,8 @@ export const routes=[
  {title:'01 · 先把自己讲清楚',time:'20 分钟',detail:'能用一分钟介绍自己，再展开一个有证据的项目。',ids:['s01','s04','s20','s16']},
  {title:'02 · 拿出工程判断',time:'30 分钟',detail:'解释先定规格、如何验证 AI，以及如何处理失败。',ids:['s02','s03','a03','a12','a14']},
  {title:'03 · 准备后端实战',time:'40 分钟',detail:'优先解决异步、接口权限、查询和故障排查。',ids:['s23','c06','s21','c07','s05','d04','s06']},
- {title:'04 · 讲业务与 AI 边界',time:'25 分钟',detail:'把真实任务、RAG 与 Agent 选择和远程安排串起来。',ids:['b03','b06','s13','s14','s15','s22']}
+ {title:'04 · 讲业务与 AI 边界',time:'25 分钟',detail:'把真实任务、RAG 与 Agent 选择和远程安排串起来。',ids:['b03','b06','s13','s14','s15','s22']},
+ {title:'05 · 全栈模拟面试八题',time:'30 分钟',detail:'按上轮面试顺序练习登录、租户隔离、SQL、缓存、上传、安全、排障和发布。',ids:['f01','f02','d04','d06','f03','d08','s07','s11']}
 ];
 export const company={name:'川下科技',fullName:'深圳市川下科技有限公司',role:'Vibe Coding · Python / Go 开发',salary:'1–2 万 / 月 · 13 薪',location:'居家远程 · 招聘地点深圳',updated:'2026-11-02',
  description:'招聘介绍涉及自研项目及网站、App、小程序等开发服务，表述中也包含外包业务。自研与客户交付的实际占比、行业客户和项目周期仍需面试确认。',

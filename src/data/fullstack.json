@@ -1,0 +1,59 @@
+[
+  {
+    "id": "f01",
+    "category": "architecture",
+    "title": "怎样设计一个完整的网页登录系统？",
+    "priority": "P1",
+    "summary": "从一次登录走到退出后会话失效。",
+    "focus": [
+      "身份验证、会话管理、逐资源授权。"
+    ],
+    "blocks": [],
+    "followups": [],
+    "source": "全栈模拟面试",
+    "tags": [
+      "全栈八题",
+      "architecture"
+    ],
+    "boundary": "这里描述的是面试场景中的设计方案。",
+    "links": []
+  },
+  {
+    "id": "f02",
+    "category": "database",
+    "title": "多租户 SaaS 怎样隔离不同客户的数据？",
+    "priority": "P1",
+    "summary": "即使用户猜到另一公司的订单 ID，也只能访问自己获准操作的资源。",
+    "focus": [
+      "身份、成员关系、资源归属和跨租户测试。"
+    ],
+    "blocks": [],
+    "followups": [],
+    "source": "全栈模拟面试",
+    "tags": [
+      "全栈八题",
+      "database"
+    ],
+    "boundary": "这里描述的是面试场景中的设计方案。",
+    "links": []
+  },
+  {
+    "id": "f03",
+    "category": "architecture",
+    "title": "如何设计可靠的文件上传和处理流程？",
+    "priority": "P1",
+    "summary": "断网能接着传，重复通知不会把同一份文件处理两次。",
+    "focus": [
+      "对象存储、服务端校验和后台处理。"
+    ],
+    "blocks": [],
+    "followups": [],
+    "source": "全栈模拟面试",
+    "tags": [
+      "全栈八题",
+      "architecture"
+    ],
+    "boundary": "这里描述的是面试场景中的设计方案。",
+    "links": []
+  }
+]
