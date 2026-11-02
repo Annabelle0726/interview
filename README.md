@@ -68,6 +68,8 @@ npm run dev
 
 ## 内容维护
 
+Python 与项目回答依据实际源码整理，具体实现与可展示材料见 [项目代码与面试表达依据](docs/project-evidence.md)。
+
 - `src/data/spoken-answers.json`：按题号保存面试口述稿、全部追问与答复。重新导入原手册不会覆盖口述稿。
 - `src/data/fullstack.json`：本轮新增的登录、隔离和文件上传题。全栈八题的练习顺序在首页第五组。
 - `src/data/questions.json`：上传手册的完整主问题、回答、代码和题内表格。
