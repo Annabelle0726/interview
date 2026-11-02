@@ -1,0 +1,389 @@
+{
+  "source": "Interviews (1).docx",
+  "count": 64,
+  "groups": {
+    "A": 14,
+    "B": 16,
+    "C": 13,
+    "D": 16,
+    "E": 5
+  },
+  "appendix": [
+    [
+      [
+        "章节",
+        "题号与数量",
+        "练习重点"
+      ],
+      [
+        "一 自我介绍与 AI 协作",
+        "A1 至 A6  共 6 题",
+        "讲清职责与验证方式"
+      ],
+      [
+        "二 人类产品经理的业务判断",
+        "B1 至 B16  共 16 题",
+        "需求 取舍 用户价值与交付"
+      ],
+      [
+        "三 React Vue Python Go",
+        "C1 至 C13  共 13 题",
+        "原有技术栈内容集中复习"
+      ],
+      [
+        "四 工程场景与 AI 应用",
+        "D1 至 D16  共 16 题",
+        "用问题解释技术选择"
+      ],
+      [
+        "五 向面试官提问",
+        "E1 至 E5  共 5 题",
+        "确认工作目标与协作条件"
+      ]
+    ],
+    [
+      [
+        "项目",
+        "可准备的材料",
+        "需要讲清楚的边界"
+      ],
+      [
+        "Agency Bloom",
+        "核心流程演示 界面取舍 行动记录",
+        "已实现的功能与尚未验证的用户价值"
+      ],
+      [
+        "Belay",
+        "权限或隔离样例 预算控制说明",
+        "个人职责与团队工作 已实现与设计建议"
+      ],
+      [
+        "文若 RAG",
+        "定制界面 平台评估与暂停复盘",
+        "定制评估经历与真实商业交付的区别"
+      ]
+    ]
+  ],
+  "mapping": [
+    {
+      "id": "a01",
+      "originalRef": "A1",
+      "title": "请介绍一下自己，为什么想做 UX/UI 与产品设计？"
+    },
+    {
+      "id": "a02",
+      "originalRef": "A2",
+      "title": "你的个人网站用了多少 AI Coding？你自己负责什么？"
+    },
+    {
+      "id": "a03",
+      "originalRef": "A3",
+      "title": "AI 说代码和测试都通过了，你怎样确认可信？"
+    },
+    {
+      "id": "a04",
+      "originalRef": "A4",
+      "title": "你的网站很漂亮，怎样判断视觉设计帮助了用户？"
+    },
+    {
+      "id": "a05",
+      "originalRef": "A5",
+      "title": "为什么调整首页打字动画？"
+    },
+    {
+      "id": "a06",
+      "originalRef": "A6",
+      "title": "为什么用户需要 Agency Bloom，而不是直接使用 AI 聊天工具？"
+    },
+    {
+      "id": "a07",
+      "originalRef": "A7",
+      "title": "Agency Bloom 没有用户规模数据，你怎样证明设计有价值？"
+    },
+    {
+      "id": "a08",
+      "originalRef": "A8",
+      "title": "Somnia Library 基于现有产品开发，你的贡献是什么？"
+    },
+    {
+      "id": "a09",
+      "originalRef": "A9",
+      "title": "Belay 请求失败或刷新后，怎样设计恢复体验？"
+    },
+    {
+      "id": "a10",
+      "originalRef": "A10",
+      "title": "桌面端悬停展开的卡片，到了手机端怎么办？"
+    },
+    {
+      "id": "a11",
+      "originalRef": "A11",
+      "title": "开发者认为设计成本太高，你会怎样处理？"
+    },
+    {
+      "id": "a12",
+      "originalRef": "A4",
+      "title": "在 AI 编码前 你怎样检查技术设计"
+    },
+    {
+      "id": "a13",
+      "originalRef": "A5",
+      "title": "你怎样用项目规则或 Skills 减少 AI 错误"
+    },
+    {
+      "id": "a14",
+      "originalRef": "A6",
+      "title": "AI 修改后测试失败 你怎样处理"
+    },
+    {
+      "id": "b01",
+      "originalRef": "B1",
+      "title": "AI 能写代码以后 你作为人的产品判断在哪里"
+    },
+    {
+      "id": "b02",
+      "originalRef": "B2",
+      "title": "你怎样判断一个需求是否值得做"
+    },
+    {
+      "id": "b03",
+      "originalRef": "B3",
+      "title": "用户说想要一个 AI 功能 你会怎样追问"
+    },
+    {
+      "id": "b04",
+      "originalRef": "B4",
+      "title": "一个产品有很多潜在用户 你先服务谁"
+    },
+    {
+      "id": "b05",
+      "originalRef": "B5",
+      "title": "用户为什么用 Bloom 而不直接用通用 AI"
+    },
+    {
+      "id": "b06",
+      "originalRef": "B6",
+      "title": "只有两周时间 你怎样确定首版范围"
+    },
+    {
+      "id": "b07",
+      "originalRef": "B7",
+      "title": "老板 客户和用户同时提需求 你怎样排优先级"
+    },
+    {
+      "id": "b08",
+      "originalRef": "B8",
+      "title": "用户都说好用 却很少回来 你怎样排查"
+    },
+    {
+      "id": "b09",
+      "originalRef": "B9",
+      "title": "上线以后 你怎样判断产品真的有效"
+    },
+    {
+      "id": "b10",
+      "originalRef": "B10",
+      "title": "你会怎样验证付费意愿和收费方式"
+    },
+    {
+      "id": "b11",
+      "originalRef": "B11",
+      "title": "企业客户愿意做试点 你怎样判断值得投入"
+    },
+    {
+      "id": "b12",
+      "originalRef": "B12",
+      "title": "AI 成本上涨或预算耗尽时 你怎样取舍"
+    },
+    {
+      "id": "b13",
+      "originalRef": "B13",
+      "title": "用户要求 AI 直接替他完成所有操作 怎么办"
+    },
+    {
+      "id": "b14",
+      "originalRef": "B14",
+      "title": "页面好看但用户不会用 你如何改设计"
+    },
+    {
+      "id": "b15",
+      "originalRef": "B15",
+      "title": "什么时候应该停止一个项目或改变方向"
+    },
+    {
+      "id": "b16",
+      "originalRef": "B16",
+      "title": "需求变更且你不同意时 如何推动团队做决定"
+    },
+    {
+      "id": "c01",
+      "originalRef": "C1",
+      "title": "React 中 useState 和 useEffect 分别有什么作用"
+    },
+    {
+      "id": "c02",
+      "originalRef": "C2",
+      "title": "为什么 React 组件会重复渲染 如何优化"
+    },
+    {
+      "id": "c03",
+      "originalRef": "C3",
+      "title": "React 中为什么不建议直接修改 State"
+    },
+    {
+      "id": "c04",
+      "originalRef": "C4",
+      "title": "Vue 3 的响应式系统是如何工作的"
+    },
+    {
+      "id": "c05",
+      "originalRef": "C5",
+      "title": "Vue 的 computed 和 watch 有什么区别"
+    },
+    {
+      "id": "c06",
+      "originalRef": "C6",
+      "title": "Python 的 async   await 是如何工作的 适合什么场景"
+    },
+    {
+      "id": "c07",
+      "originalRef": "C7",
+      "title": "如果使用 FastAPI 设计一个用户 API 你会考虑什么"
+    },
+    {
+      "id": "c08",
+      "originalRef": "C8",
+      "title": "Go 的 Goroutine 和普通线程有什么区别"
+    },
+    {
+      "id": "c09",
+      "originalRef": "C9",
+      "title": "Go 中 Channel 有什么作用"
+    },
+    {
+      "id": "c10",
+      "originalRef": "C10",
+      "title": "Go 如何处理错误 与 Python 有什么区别"
+    },
+    {
+      "id": "c11",
+      "originalRef": "C11",
+      "title": "Python 中的 GIL 是什么 有什么作用"
+    },
+    {
+      "id": "c12",
+      "originalRef": "C12",
+      "title": "Python 装饰器了解吗"
+    },
+    {
+      "id": "c13",
+      "originalRef": "C13",
+      "title": "Python 生成器和迭代器有什么区别"
+    },
+    {
+      "id": "d01",
+      "originalRef": "D1",
+      "title": "搜索 ja 和 java 后者先返回 如何避免旧结果覆盖"
+    },
+    {
+      "id": "d02",
+      "originalRef": "D2",
+      "title": "前端如何取消旧请求并处理过期响应"
+    },
+    {
+      "id": "d03",
+      "originalRef": "D3",
+      "title": "除了取消请求 还有哪些避免旧结果覆盖的办法"
+    },
+    {
+      "id": "d04",
+      "originalRef": "D4",
+      "title": "一张流水表有一亿条数据 只查询最近一天 怎么优化"
+    },
+    {
+      "id": "d05",
+      "originalRef": "D5",
+      "title": "除了索引 覆盖索引 分区分表 还有什么优化思路"
+    },
+    {
+      "id": "d06",
+      "originalRef": "D6",
+      "title": "先更新数据库 再删除缓存 能保证最终一致性吗"
+    },
+    {
+      "id": "d07",
+      "originalRef": "D7",
+      "title": "延迟双删的具体执行流程是什么"
+    },
+    {
+      "id": "d08",
+      "originalRef": "D8",
+      "title": "密码 身份证号码等敏感信息 数据库应该如何安全存储"
+    },
+    {
+      "id": "d09",
+      "originalRef": "D9",
+      "title": "如果密码采用加盐哈希 登录时如何验证"
+    },
+    {
+      "id": "d10",
+      "originalRef": "D10",
+      "title": "身份证号码和密码可以采用相同方案吗"
+    },
+    {
+      "id": "d11",
+      "originalRef": "D11",
+      "title": "日志文件特别大 如何快速查看最新的一部分"
+    },
+    {
+      "id": "d12",
+      "originalRef": "D12",
+      "title": "如何持续实时查看新增日志"
+    },
+    {
+      "id": "d13",
+      "originalRef": "D13",
+      "title": "已知 requestId 如何筛选对应请求日志"
+    },
+    {
+      "id": "d14",
+      "originalRef": "D14",
+      "title": "除了模板方法模式 还了解哪些设计模式"
+    },
+    {
+      "id": "d15",
+      "originalRef": "D15",
+      "title": "举一个适合使用策略模式的实际业务场景"
+    },
+    {
+      "id": "d16",
+      "originalRef": "D16",
+      "title": "除了 AI 辅助编程 对 Agent 深度学习 RAG 了解多少"
+    },
+    {
+      "id": "e01",
+      "originalRef": "E1",
+      "title": "团队希望这个岗位解决什么问题"
+    },
+    {
+      "id": "e02",
+      "originalRef": "E2",
+      "title": "实际使用什么技术栈和协作流程"
+    },
+    {
+      "id": "e03",
+      "originalRef": "E3",
+      "title": "新人会承担什么工作 有怎样的反馈机制"
+    },
+    {
+      "id": "e04",
+      "originalRef": "E4",
+      "title": "后续还有哪些招聘流程"
+    },
+    {
+      "id": "e05",
+      "originalRef": "E5",
+      "title": "长期远程的具体安排是什么"
+    }
+  ]
+}
