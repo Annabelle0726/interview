@@ -8,9 +8,9 @@ function readData(name:string) {
 }
 
 test('every question has its own spoken answer and replies to every original follow-up',()=>{
- const vibe=readData('vibe-coding');
- const cards=[...readData('questions'),...readData('supplement'),...readData('fullstack'),...vibe];
- const answers={...readData('spoken-answers'),...Object.fromEntries(vibe.map((card:{id:string})=>[card.id,card]))};
+ const additions=[...readData('vibe-coding'),...readData('recent-qa')];
+ const cards=[...readData('questions'),...readData('supplement'),...readData('fullstack'),...additions];
+ const answers={...readData('spoken-answers'),...Object.fromEntries(additions.map((card:{id:string})=>[card.id,card]))};
  assert.equal(new Set(cards.map(card=>card.id)).size,cards.length);
  assert.deepEqual(Object.keys(answers).sort(),cards.map(card=>card.id).sort());
  for(const card of cards) {

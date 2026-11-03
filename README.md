@@ -17,11 +17,13 @@
 
 一个围绕目标岗位组织知识、回答与项目经历的个人面试工作台。将原始手册、岗位补充、全栈模拟和项目表达放在一起，支持自测、修改口述回答、记录笔记与复习进度。
 
-**97 道口述练习 · 135 个有回答的追问 · 45 道选择题 · 12 个主题 · 4 个项目**
+**103 道口述练习 · 154 个有回答的追问 · 45 道选择题 · 12 个主题 · 4 个项目**
 
 覆盖 Python 后端、React / Vue、数据库、Linux、RAG / Agent、AI Coding 与架构交付；包含川下科技岗位专项。公司资料依据所提供的 JD 与 HR 沟通整理，资料日期为 **2026-11-02**。
 
 ## 怎样练习
+
+**11.03 · AI 应用与前端场景补充**：新增 6 道面经改写模拟题，涵盖 JSON 运行时校验、身份授权、SSE 恢复、加载更多、幂等重试与延期沟通，附 19 个追问和 3 个小练习的验收清单。通过首页同名学习路线进入；[来源时间、技能优先级与练习安排](docs/2026-11-03-qa-sources.md)单独记录，不将整理日期当作面试日期。
 
 **P0 · AI 开发核心能力**：补齐 Context Engineering、Prompt Engineering、Agentic Workflow、Debugging、Code Review、Git Workflow、Testing & CI 七项。每项包含掌握要点、项目场景、口述稿、Agent 任务示例、追问与 3 道带解析的选择题，共 21 道。通过首页或左侧“P0 开发核心能力”进入，切换主题即可学习。
 
@@ -78,6 +80,7 @@ Python 与项目回答依据实际源码整理，具体实现与可展示材料�
 
 - `src/data/p0-core.json`、`src/data/p0-quiz.json`：7 项开发核心能力与 21 道场景单选题。
 - `src/data/engineering-quiz.json`：24 道工程方法单选题，含正确选项与逐项解析。
+- `src/data/recent-qa.json`：6 道 11.03 场景补充，含口述回答、追问、示例、练习验收与来源链接。
 - `src/data/vibe-coding.json`：6 道 Vibe Coding 专题，含简历表达、Agent 工作流和红色重点提示。
 - `src/data/spoken-answers.json`：按题号保存面试口述稿、全部追问与答复。重新导入原手册不会覆盖口述稿。
 - `src/data/fullstack.json`：本轮新增的登录、隔离和文件上传题。全栈八题的练习顺序在首页第五组。
