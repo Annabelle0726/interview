@@ -17,7 +17,7 @@
 
 一个围绕目标岗位组织知识、回答与项目经历的个人面试工作台。将原始手册、岗位补充、全栈模拟和项目表达放在一起，支持自测、修改口述回答、记录笔记与复习进度。
 
-**103 道口述练习 · 154 个有回答的追问 · 45 道选择题 · 12 个主题 · 4 个项目**
+**103 道口述练习 · 154 个有回答的追问 · 78 道选择题 · 12 个主题 · 4 个项目**
 
 覆盖 Python 后端、React / Vue、数据库、Linux、RAG / Agent、AI Coding 与架构交付；包含川下科技岗位专项。公司资料依据所提供的 JD 与 HR 沟通整理，资料日期为 **2026-11-02**。
 
@@ -26,6 +26,10 @@
 **11.03 · AI 应用与前端场景补充**：新增 6 道面经改写模拟题，涵盖 JSON 运行时校验、身份授权、SSE 恢复、加载更多、幂等重试与延期沟通，附 19 个追问和 3 个小练习的验收清单。通过首页同名学习路线进入；[来源时间、技能优先级与练习安排](docs/2026-11-03-qa-sources.md)单独记录，不将整理日期当作面试日期。
 
 **P0 · AI 开发核心能力**：补齐 Context Engineering、Prompt Engineering、Agentic Workflow、Debugging、Code Review、Git Workflow、Testing & CI 七项。每项包含掌握要点、项目场景、口述稿、Agent 任务示例、追问与 3 道带解析的选择题，共 21 道。通过首页或左侧“P0 开发核心能力”进入，切换主题即可学习。
+
+**P1 · 后端工程师重点掌握**：DDD、API Contract、Clean Architecture、Security、Observability、CI/CD & DevOps，共 6 项课程、18 道场景单选。围绕 Bloom 和 Belay 的业务模型、接口、预算事务、依赖边界与运行证据展开。
+
+**P2 · AI Agent 进阶能力**：MCP、Skills、Hooks、AI Evaluation、Agent Orchestration，共 5 项课程、15 道场景单选。日常 Skills 使用仍属于 P0，P2 深入工作流封装、触发与维护评估。通过首页或侧栏进入两个专题；每项都包含掌握要点、项目场景、口述、任务示例、追问和逐项解析。切换主题保留答题记录，重练只重置当前主题。
 
 新增 **SDD / BDD / TDD 选择题**：每类 8 道，共 24 道单选题。通过首页入口或左侧“工程方法选择题”进入，选择并提交后查看正确答案和四个选项的解析。支持分主题练习、题号跳转、计分与重练；结果独立保存在当前浏览器，不包含在面试笔记备份中。
 
@@ -78,6 +82,9 @@ npm run dev
 
 Python 与项目回答依据实际源码整理，具体实现与可展示材料见 [项目代码与面试表达依据](docs/project-evidence.md)。
 
+- `src/data/p1-core.json`、`src/data/p1-quiz.json`：6 项后端工程课程与 18 道场景选择题。
+- `src/data/p2-core.json`、`src/data/p2-quiz.json`：5 项 Agent 进阶课程与 15 道场景选择题。
+- `src/core-curriculum.ts`、`src/quiz-bank.ts`：课程分层与完整选择题数据入口。
 - `src/data/p0-core.json`、`src/data/p0-quiz.json`：7 项开发核心能力与 21 道场景单选题。
 - `src/data/engineering-quiz.json`：24 道工程方法单选题，含正确选项与逐项解析。
 - `src/data/recent-qa.json`：6 道 11.03 场景补充，含口述回答、追问、示例、练习验收与来源链接。
