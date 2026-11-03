@@ -17,11 +17,13 @@
 
 一个围绕目标岗位组织知识、回答与项目经历的个人面试工作台。将原始手册、岗位补充、全栈模拟和项目表达放在一起，支持自测、修改口述回答、记录笔记与复习进度。
 
-**97 道练习 · 135 个有回答的追问 · 12 个主题 · 4 个项目**
+**97 道口述练习 · 135 个有回答的追问 · 45 道选择题 · 12 个主题 · 4 个项目**
 
 覆盖 Python 后端、React / Vue、数据库、Linux、RAG / Agent、AI Coding 与架构交付；包含川下科技岗位专项。公司资料依据所提供的 JD 与 HR 沟通整理，资料日期为 **2026-11-02**。
 
 ## 怎样练习
+
+**P0 · AI 开发核心能力**：补齐 Context Engineering、Prompt Engineering、Agentic Workflow、Debugging、Code Review、Git Workflow、Testing & CI 七项。每项包含掌握要点、项目场景、口述稿、Agent 任务示例、追问与 3 道带解析的选择题，共 21 道。通过首页或左侧“P0 开发核心能力”进入，切换主题即可学习。
 
 新增 **SDD / BDD / TDD 选择题**：每类 8 道，共 24 道单选题。通过首页入口或左侧“工程方法选择题”进入，选择并提交后查看正确答案和四个选项的解析。支持分主题练习、题号跳转、计分与重练；结果独立保存在当前浏览器，不包含在面试笔记备份中。
 
@@ -74,6 +76,7 @@ npm run dev
 
 Python 与项目回答依据实际源码整理，具体实现与可展示材料见 [项目代码与面试表达依据](docs/project-evidence.md)。
 
+- `src/data/p0-core.json`、`src/data/p0-quiz.json`：7 项开发核心能力与 21 道场景单选题。
 - `src/data/engineering-quiz.json`：24 道工程方法单选题，含正确选项与逐项解析。
 - `src/data/vibe-coding.json`：6 道 Vibe Coding 专题，含简历表达、Agent 工作流和红色重点提示。
 - `src/data/spoken-answers.json`：按题号保存面试口述稿、全部追问与答复。重新导入原手册不会覆盖口述稿。

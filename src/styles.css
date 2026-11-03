@@ -52,5 +52,22 @@
 .quiz-error { color:#913a32; }
 .quiz-complete { margin-top:24px; font-weight:600; line-height:1.9; }
 .quiz-save-note { color:#607487; font-size:12px; line-height:1.8; margin-top:24px; }
+.p0-core { max-width:900px; margin:auto; }
+.p0-topic-picker { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin:24px 0; color:#405970; }
+.p0-topic-picker label { font-size:13px; font-weight:600; }
+.p0-topic-picker select { max-width:100%; min-height:44px; font-size:15px; }
+.p0-lesson { padding:28px 30px; background:#fff; border:1px solid var(--line); border-radius:8px; margin-bottom:24px; }
+.p0-lesson h2 { margin:14px 0 4px; font-size:25px; overflow-wrap:anywhere; }
+.p0-lesson h3 { margin:27px 0 10px; font-size:17px; }
+.p0-lesson p,.p0-skills { font-size:15px; line-height:1.95; color:#405970; overflow-wrap:anywhere; }
+.p0-skills { padding-left:24px; }
+.p0-skills li { padding-left:4px; margin-bottom:9px; }
+.p0-details { padding:16px 0; border-top:1px solid var(--line); }
+.p0-details summary { cursor:pointer; color:#173959; font-size:14px; font-weight:600; line-height:1.8; }
+.p0-details summary:focus-visible { outline:2px solid #365e7b; outline-offset:4px; }
+.p0-template { padding:16px; background:#f3f7fb; border-radius:5px; margin:14px 0 0; }
+.p0-practice-jump { margin-bottom:30px; }
+.p0-quiz-section { padding-top:8px; scroll-margin-top:24px; }
+@media(max-width:760px) { .p0-lesson { padding:22px 18px; } .p0-lesson h2 { font-size:22px; } .p0-lesson p,.p0-skills { font-size:14px; } .p0-topic-picker select { width:100%; font-size:16px; } }
 @media(max-width:760px) { .quiz-card { padding:20px 17px; } .quiz-card h2 { font-size:18px; } .quiz-option { padding:12px; } .resume-study { flex-wrap:wrap; } }
 @media(max-width:760px) { .interview-attention { padding:14px 17px; } .interview-attention p { font-size:13px; } }
