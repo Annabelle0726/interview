@@ -23,6 +23,8 @@
 
 ## 怎样练习
 
+新增 **SDD / BDD / TDD 选择题**：每类 8 道，共 24 道单选题。通过首页入口或左侧“工程方法选择题”进入，选择并提交后查看正确答案和四个选项的解析。支持分主题练习、题号跳转、计分与重练；结果独立保存在当前浏览器，不包含在面试笔记备份中。
+
 **HR 重点：Python 后端开发 + Vibe Coding。** 首页新增“Vibe Coding · 简历与实战”，覆盖简历表达、Agent 派工、Skills、TDD / SDD / BDD、协作 Review 与现场演示。正文加粗标出能力与动作，红色提示标出面试前应准备的证据。
 
 | 想完成的事 | 在手册里怎么做 |
@@ -72,6 +74,7 @@ npm run dev
 
 Python 与项目回答依据实际源码整理，具体实现与可展示材料见 [项目代码与面试表达依据](docs/project-evidence.md)。
 
+- `src/data/engineering-quiz.json`：24 道工程方法单选题，含正确选项与逐项解析。
 - `src/data/vibe-coding.json`：6 道 Vibe Coding 专题，含简历表达、Agent 工作流和红色重点提示。
 - `src/data/spoken-answers.json`：按题号保存面试口述稿、全部追问与答复。重新导入原手册不会覆盖口述稿。
 - `src/data/fullstack.json`：本轮新增的登录、隔离和文件上传题。全栈八题的练习顺序在首页第五组。
