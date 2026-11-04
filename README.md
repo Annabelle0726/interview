@@ -25,6 +25,8 @@
 
 **11.04 · 作品介绍与面试深挖**：项目库新增 Agency Bloom、Belay、Somnia Library 三份完整介绍，包含 30 秒概述、2–3 分钟展开、技术流程、9 个实现案例、15 个带回答的追问和演示顺序；Belay 重点补充 Docker 沙箱、恢复与预算。保留文若，并补充个人作品集、Cupcakes、Travel Discovery 和三组数据作品。支持项目直达链接、正文搜索与介绍自测，原项目笔记继续保留。进入“我的项目库”，或在页面地址后加 `#project:belay`。[内容结构与核对记录](docs/project-dossiers.md)。
 
+**高频深入追问补充**：按本人提供的问题清单增加 26 个逐题回答，另补“我参与的 Docker 学生代码执行”。Bloom 9 题、Somnia 8 题、Belay 10 题，共 27 题，涵盖选型、模型接入、刷新恢复、表单容错、React Query、JWT 与资源授权、预算竞争及失败结算；每题附源码位置。连同原 15 个补充追问，项目库共有 42 个项目问答，不计入上方口述题库统计。
+
 **11.03 · AI 应用与前端场景补充**：新增 6 道面经改写模拟题，涵盖 JSON 运行时校验、身份授权、SSE 恢复、加载更多、幂等重试与延期沟通，附 19 个追问和 3 个小练习的验收清单。通过首页同名学习路线进入；[来源时间、技能优先级与练习安排](docs/2026-11-03-qa-sources.md)单独记录，不将整理日期当作面试日期。
 
 **P0 · AI 开发核心能力**：补齐 Context Engineering、Prompt Engineering、Agentic Workflow、Debugging、Code Review、Git Workflow、Testing & CI 七项。每项包含掌握要点、项目场景、口述稿、Agent 任务示例、追问与 3 道带解析的选择题，共 21 道。通过首页或左侧“P0 开发核心能力”进入，切换主题即可学习。
@@ -98,6 +100,7 @@ Python 与项目回答依据实际源码整理，具体实现与可展示材料�
 - `src/data/supplement.json`、`scripts/supplement.py`：岗位与项目补充题及其编辑来源。
 - `src/data/catalog.ts`：主题、公司、项目、学习路线和题目关系。首版提供内容阅读、进度与笔记，不包含网页内题库编辑器。
 - `src/data/projects.ts`：项目元信息、原笔记 ID 与搜索入口；`project-guides.json` 是三个主作品的详细介绍，`other-projects.json` 保存补充作品。
+- `src/data/project-interview-questions.json`：本人提供的 26 个高频深入追问，加 Docker 学生代码执行追问，共 27 个回答与源码依据。
 - `src/ProjectLibrary.tsx`：项目切换、介绍自测、技术案例、追问与个人笔记；维护内容时参考 `docs/project-dossiers.md`。
 - `src/data/import-report.json`：源题号与新编号、分组数量和附录。
 - `public/Interviews-original.docx`：原始上传文件。也可在“内容与原始资料”下载。

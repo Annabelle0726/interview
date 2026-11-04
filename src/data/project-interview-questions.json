@@ -1,0 +1,143 @@
+{
+  "bloom": [
+    {
+      "prompt":"为什么要做 Agency Bloom？你发现了什么用户需求？",
+      "answer":"我的出发点是，人遇到职业或生活选择时，困扰往往不是缺一个建议，而是自己的价值、现实约束和可能方向还混在一起。我希望给用户一个可以慢慢表达、比较和保留想法的空间，职业探索是首个验证场景。\n\n这是目前的产品判断与待验证需求，不能说已经做了大规模用户研究。实现上，我让用户决定 AI 的理解是否准确、是否值得保留，也允许只聊一聊或暂停。接下来要观察真实用户是否能更清楚地表达问题和作出自己的判断，而不是只评价文案是否好听。",
+      "code":["docs/PRODUCT_DIRECTION.md","AGENT.md"]
+    },
+    {
+      "prompt":"为什么选择微信小程序，而不是直接开发 Web 应用？",
+      "answer":"我的目标是让中文用户在日常场景中方便地打开、记录和继续之前的讨论。微信已经是熟悉的入口，小程序减少了额外安装和账户使用的门槛，也能接入微信登录，所以我先选择这个载体。\n\n这不代表 Web 不合适。Web 更方便通过链接访问和跨平台演示，小程序则要适配微信运行时、登录、网络和发布规则。我用网页预览辅助迭代，但上线判断仍要回到原生小程序：键盘、返回、流式网络和页面恢复不能只在浏览器里验收。这个取舍是产品入口选择，还没有转化率数据证明小程序一定更好。",
+      "code":["apps/miniprogram/package.json","apps/api/app/main.py","apps/miniprogram/src/native-api.ts"]
+    },
+    {
+      "prompt":"为什么选择 Vue 3 和 uni-app？",
+      "answer":"Vue 3 的组件、响应式状态和 Composition API 适合把对话、卡片、主题、加载与错误状态组织成可复用逻辑；TypeScript 用来约束组件和接口数据。uni-app 提供面向微信小程序的编译与平台 API，方便在这套组件开发方式下交付小程序。\n\n我不会把它说成写一份代码就能无差别覆盖所有端。项目仍有原生网络适配，流式事件还要处理跨 chunk 的 UTF-8 字符；浏览器预览通过后，仍需检查微信运行时。框架选择解决组织和交付效率，平台差异需要具体实现与测试。",
+      "code":["apps/miniprogram/package.json","apps/miniprogram/src/native-api.ts","apps/miniprogram/src/chat-stream.ts"]
+    },
+    {
+      "prompt":"FastAPI 在项目中具体负责哪些接口？",
+      "answer":"它是小程序与数据库、模型之间的应用服务入口。比如 POST /api/auth/wechat 处理微信登录，GET /api/me 返回当前账户，/api/issues 及其子路径管理问题和卡片，/api/conversations 管理会话、历史和聊天，/api/requests/{request_id} 查询模型请求状态，/api/usage 返回用量。\n\n接口不只是转发请求。Pydantic 校验输入，依赖提供数据库会话和当前用户，服务端检查资源归属、AI 数据同意与额度，再组织模型调用、结果保存和错误响应。面试时我会挑一次聊天请求从入口讲到数据库和模型，而不是背完整路由表。",
+      "code":["apps/api/app/main.py","apps/api/app/conversations.py","apps/api/app/schemas.py"]
+    },
+    {
+      "prompt":"SQLAlchemy 是如何与数据库交互的？",
+      "answer":"SQLAlchemy 将用户、问题、会话、消息、预算等 Python 模型映射到关系表。接口通过数据库 Session 使用 select、update、add 等操作读写数据，在事务提交后才形成持久结果；失败时需要回滚。ORM 仍然会生成 SQL，不是把数据库规则变没了。\n\n普通记录可以用模型对象组织，预算这类竞争敏感的写入则采用带条件的更新，不能只在 Python 里先查余额再修改。开发默认 SQLite，也有 PostgreSQL 配置；数据库的锁与并发差异仍需集成测试，不能仅凭使用 SQLAlchemy 就声称两者完全等价。",
+      "code":["apps/api/app/models.py","apps/api/app/main.py","apps/api/tests/test_postgres.py"]
+    },
+    {
+      "prompt":"DeepSeek API 是如何接入的？用户消息经过哪些处理才到达模型？",
+      "answer":"小程序把消息、会话与 request_id 交给后端，密钥留在服务端配置中。后端先校验登录、资源归属、会话状态和 AI 数据同意，检查重复请求与额度，再组合当前问题、允许使用的历史和已确认信息。messages_for 组织提示上下文，不能把所有历史和未经确认的推测无差别送给模型。\n\n预留预算后，通过 HTTPX AsyncClient 请求配置的 DeepSeek /chat/completions，带超时和输出限制。需要实时反馈时，服务端解析上游流，再输出本应用的 SSE 事件；最终内容经过校验后保存并结算。模型请求、页面可见片段和正式保存是不同阶段。",
+      "code":["apps/api/app/main.py","apps/api/app/ai.py","apps/api/app/chat_stream.py","apps/miniprogram/src/chat-stream.ts"]
+    },
+    {
+      "prompt":"如果模型调用超时或者失败，前端应该如何处理？",
+      "answer":"我会把等待、流式输出、完成、明确失败和结果未知分开。保留用户输入，停止无限加载，显示能理解的错误与后续操作；已经看到片段也不代表最终保存成功，不能直接把它显示成正式卡片。\n\n当前流式解析器要求收到 done 或 error 终态，断流时会提示输入仍保留、可以查看这条请求的结果。恢复时根据 request_id 查询服务端状态，先确认是否完成；超时不自动生成新 ID 再次调用。明确失败后才提供受控重试，避免重复执行和重复费用。我要分别检查模型超时、网络断开和最终校验失败，而不是统称网络错误。",
+      "code":["apps/miniprogram/src/chat-stream.ts","apps/miniprogram/src/native-api.ts","apps/api/app/main.py"]
+    },
+    {
+      "prompt":"用户刷新页面之后，之前的对话和行动记录如何恢复？",
+      "answer":"正式保存的会话、消息、卡片和进展应以服务端数据库为准。重新进入时先确认登录身份，再通过问题、会话列表和消息接口取回记录；行动或进展记录按所属用户和问题加载，不能只依赖页面内的响应式变量。\n\n恢复还要区分正式记录、未发送草稿和未确认请求。草稿有独立保存逻辑，不能当成已经发送的消息；处理中请求按原 request_id 查状态，不能刷新就重发。权限失效、记录删除或草稿版本冲突，需要明确提示而非用旧缓存冒充最新状态。面试演示可以提交后离开再回来，同时核对数据库历史和页面内容。",
+      "code":["apps/api/app/conversations.py","apps/api/app/main.py","apps/miniprogram/src/chat-drafts.ts"]
+    },
+    {
+      "prompt":"如何判断 Bloom 真正帮助了用户，而不只是生成了一段看起来合理的建议？",
+      "answer":"我会先定义希望发生的变化：用户能否更清楚地表达困扰、区分事实和假设、比较自己在意的条件，以及自主决定保留、修改、拒绝或暂不行动。让用户认可一段漂亮文字，不能单独证明这些变化发生了。\n\n验证上可以让用户带着真实问题完成一次讨论，观察哪里需要提示、能否准确解释保留的结论，再在之后回访它是否有帮助，同时记录误解、不适和不合适建议。留存、确认或行动次数可以辅助理解，但不应鼓励为了指标强迫用户行动。当前是新产品，还没有可靠的规模或效果数据，这些属于下一步验证方案。",
+      "code":["docs/PRODUCT_DIRECTION.md"]
+    }
+  ],
+  "somnia": [
+    {
+      "prompt":"为什么选择 React，而不是 Vue？",
+      "answer":"Somnia 基于已有的 Reverie 工程二次开发，原工程已经采用 React 和 TypeScript。保留技术栈可以复用页面、路由、认证与组件，集中解决阅读流程和功能改进，而不是先做一次没有明确收益的框架重写。\n\nReact 与 Vue 都能完成这类产品。我在 Bloom 用 Vue / uni-app，是面向小程序交付；在 Somnia 则沿用现有 React 工程。选型先看已有资产、平台和团队维护成本，不会简单说哪个框架全面更好。",
+      "code":["package.json","src/App.tsx"]
+    },
+    {
+      "prompt":"React Query 和普通的 useState 有什么区别？",
+      "answer":"useState 管理组件本地状态，例如输入内容、弹窗开关和选中的筛选条件；自己取数时，还要自己处理加载、错误、重复请求和刷新。React Query 主要管理服务端状态，通过 query key、缓存、失效和重新请求协调远端数据；它不是用来替换所有 useState，也不会自动保证业务权限或数据永远新鲜。\n\n就当前项目而言，package.json 声明了 React Query，但已读的 App / main 入口没有展示 QueryClientProvider，书库页面仍是手写取数和本地状态。我可以解释它适合怎样改造书库，但不能把依赖存在说成已经完成缓存迁移。真要接入，会把用户和筛选条件纳入 key，写入后更新或失效相关查询，并处理登出时的缓存清理。",
+      "code":["package.json","src/main.tsx","src/App.tsx","src/pages/Library.tsx"]
+    },
+    {
+      "prompt":"Supabase 在这个项目中负责哪些功能？",
+      "answer":"当前工程通过 Supabase 接账户认证和关系数据库。AuthProvider 用它读取 session、监听登录状态及登出；书库通过 SDK 访问公共 books、个人阅读状态、收藏和标签等表。它提供后端服务能力，所以前端不需要为这些基础读写各自搭一套 Python API。\n\n项目还存在 Deno Edge Function 的书籍评估代码，但不能据此说所有模型调用都已经迁到服务端，当前表单代码仍有客户端调用路径。数据授权也不能只看前端传了 user_id，仍要核对数据库 RLS 和部署配置。讲功能、讲安全完成情况和讲个人修改，是三件需要分别举证的事。",
+      "code":["src/auth/AuthProvider.tsx","src/pages/Library.tsx","src/hooks/useBookForm.ts","supabase-functions/supabase/functions/evaluate-book-spice/index.ts"]
+    },
+    {
+      "prompt":"添加书籍时，如何处理重复书目？",
+      "answer":"当前流程先清洗 ISBN；有 ISBN 时按 ISBN 查公共书目，没有命中再按书名和作者查。如果已有书目，就复用它的 ID；还要查当前用户是否已经在 user_book_status 中关联了这本书，重复时给提示，而不是再加一份。没有公共书目时才创建，再保存个人关系。\n\n这里要区分公共重复与个人重复。现有客户端先查再插入，能处理常见操作，但两个并发请求仍可能同时查不到；要保证并发唯一性，需要数据库唯一约束、冲突处理，必要时用事务或服务端函数。没有核对的数据库约束不能当成已经实现。",
+      "code":["src/hooks/useBookForm.ts","src/types/book.ts"]
+    },
+    {
+      "prompt":"外部元数据查询失败，如何避免用户丢失已填写的信息？",
+      "answer":"表单的人工输入和外部查询状态要分开。当前 fetchByIsbn 失败时只更新错误信息，finally 结束 fetchingIsbn，不清空 form，并提示可以手动填写；查询成功时用 setForm(prev => …) 合并数据，保留未被补全的字段。\n\n仍需注意一个边界：成功返回的 title 或 author 可能覆盖用户刚改过的值，函数式更新本身不解决这个问题。如果继续完善，我会记录查询对应的 ISBN 或请求序号，忽略过期响应，并只补空字段或让用户确认覆盖。当前是组件状态保留，页面刷新后草稿是否保留需要另做持久化，不能混为一谈。",
+      "code":["src/hooks/useBookForm.ts","src/lib/openlibrary.ts"]
+    },
+    {
+      "prompt":"为什么要做移动端导航优化？",
+      "answer":"读者在手机上找书、收藏或记录状态时，桌面侧栏与多入口布局会占用空间，关键操作也可能不易发现。我参与导航与页面层级调整，是为了让用户在首页、书库和添加等任务之间更容易切换，并清楚知道自己在哪里、怎样返回。\n\n我会通过一个具体任务来演示：找到一本书、查看信息、收藏或入库，再回到列表，检查窄屏下的入口、触达、遮挡和状态保留。目前可以展示实现和设计判断，但没有可引用的点击减少或转化提升数据，不能将预期改善当作已测成果。",
+      "code":["src/App.tsx","src/components/layout/Layout.tsx"]
+    },
+    {
+      "prompt":"如果大量书籍数据需要展示，如何优化页面性能？",
+      "answer":"当前书库会获取数据、并发读取个人状态与收藏标签，用 Map / Set 合并，再在客户端做搜索、排序与分页。这能解释现有组织方式，但客户端分页并不减少数据库返回的数据量，书籍很多时仍会增加传输、计算和渲染成本。\n\n我会先测 Network、取数耗时和渲染，再按瓶颈处理：服务端查询与分页、必要的索引、只取需要字段；搜索防抖并忽略旧请求；图片缩略图和懒加载；长列表必要时虚拟化。React Query 可以协调缓存与请求，但要配合真实服务端分页。这些是针对大数据量的改进方案，目前不能说已测出性能提升。",
+      "code":["src/pages/Library.tsx"]
+    },
+    {
+      "prompt":"你认为这个项目中最值得改进的用户体验是什么？",
+      "answer":"我会优先完善添加书籍从外部检索到入库的连续性。用户可能先输入 ISBN，再补作者或封面；如果查询失败、旧响应覆盖输入，或保存失败却看不懂哪一步完成，就会重复劳动，也不知道该不该再点一次。\n\n我的改进顺序是：保留草稿，明确查询中和保存中，失败时给可继续的路径，避免旧响应覆盖人工输入，区分公共书目创建与个人关联是否成功，最后再打磨动画。可以用首次添加、重复添加、查询失败和保存失败四个任务验证；这是基于现有代码提出的优先级，不是已经完成的用户研究结论。",
+      "code":["src/hooks/useBookForm.ts","src/pages/AddBook.tsx"]
+    }
+  ],
+  "belay": [
+    {
+      "prompt":"会话恢复是怎么实现的？如何找到用户之前的会话？",
+      "answer":"先取得经过认证和授权的身份，再按课程练习及版本查询这个身份允许保存的会话。服务端有 conversations 列表、会话元信息和 messages 历史接口，repository 会检查 owner_key，而不是拿到一个会话 ID 就能读取任何人的内容。\n\n浏览器主要保存会话指针和偏好，不把令牌或完整对话当作 localStorage 历史库。恢复 key 结合服务地址、机构、班级、学习者与练习等范围；重新载入时先取当前配置和授权范围，再恢复对应会话。如果用户没选择保存、历史过期或删除，就明确不可恢复，不能承诺所有记录永久存在。",
+      "code":["frontend/conversation-client.js","backend/app/conversations/router.py","backend/app/conversations/repository.py"]
+    },
+    {
+      "prompt":"用户刷新页面后，如何保证对话状态正确？",
+      "answer":"不能只恢复消息数组，还要恢复会话 ID、版本和待处理任务。前端通过原 request_id 或 job ID 查询服务端状态，按服务端历史重新组织消息；已完成的请求不重复提交，结果未知时继续确认状态，而不是把超时当成没执行。\n\n还要防止旧响应写进新会话。当前客户端有 generation 等会话代际状态，服务端提交也校验 expected revision；版本冲突或未完成 turn 需要刷新再继续。验证时重点卡在发送后、回执前刷新，核对消息数、请求记录和界面状态，同时覆盖已保存与未保存两条路径。",
+      "code":["frontend/conversation-client.js","frontend/ask-jobs.js","backend/app/conversations/repository.py","backend/app/controls/saved.py"]
+    },
+    {
+      "prompt":"如何防止不同班级的用户访问彼此的数据？",
+      "answer":"班级范围必须由服务端可信授权决定，不能只信任前端传的 class_id。当前 authorize 先验证 JWT，再从运营方维护的 membership 和 assignment grant 确定机构、班级、学习者和练习权限；客户端请求范围只能在被授予的范围内选择。\n\n存储身份的 storage_id 包含机构、班级与学习者，会话读取还检查 owner_key、练习版本和当前权限。恢复、任务状态和引用历史也不能绕过检查。测试应覆盖同一用户跨班级、伪造 class_id、另一个用户的 cid 以及权限撤销；把数据写了 class_id 字段不等于已经完成隔离，更不等于有完整班级管理系统。",
+      "code":["backend/app/auth.py","backend/app/conversations/repository.py","backend/app/store/scoped.py"]
+    },
+    {
+      "prompt":"JWT 认证与资源授权有什么区别？",
+      "answer":"认证回答这个请求是谁发来的、凭证是否可信；授权回答这个身份现在能不能访问某个班级、练习、会话或功能。JWT 校验通过，不能直接推出它能读任意 conversation ID。\n\nBelay 会校验签名算法、issuer、audience、有效期和必要 claims，再检查服务端 membership、练习版本及行为授权。授权配置按请求重新读取，因此即使 token 尚未过期，撤销的权限也不能继续使用。面试时我会用合法 token 访问别人的 cid 这个反例说明两者差别，而不是只解释 token 格式。",
+      "code":["backend/app/auth.py","backend/app/conversations/repository.py"]
+    },
+    {
+      "prompt":"为什么需要在 AI 请求之前预留预算？",
+      "answer":"外部模型调用会消耗共享资源。如果多个请求只是各自读一下余额，然后直接调用模型，它们可能同时认为额度足够，最后实际费用已经产生才发现超额。预留把一次即将开始的调用变成账本里的责任。\n\n项目会在共享账本事务中检查各层额度并写入本次 attempt 的预留，成功后才进入外部调用，完成后按实际 token 和费用结算。估算与真实账单仍可能有差异，代码还有 unknown 和 overrun 等状态，因此它是资源控制机制，不是对供应商费用的无限保证。",
+      "code":["backend/app/controls/runtime.py","backend/app/controls/ledger.py"]
+    },
+    {
+      "prompt":"两个并发请求同时申请剩余预算时，如何保证不会超额？",
+      "answer":"关键是把检查用量和写入预留放在同一段数据库协调事务里，所有竞争者经过同一个共享账本。当前 PostgreSQL 使用事务级 advisory lock，SQLite 本地实现使用 BEGIN IMMEDIATE；前一个事务写入后，后一个再计算时就能看到已经占用的额度。\n\n所以只剩一笔额度时，两个不同请求应一个成功、一个 budget_exhausted。Python 进程内的 Lock 无法协调多个 worker，也不能把普通的先 SELECT 再 INSERT 自动当成并发安全。当前协调策略比较保守，优先正确性；是否需要拆锁或提高吞吐，要在真实负载下测量。",
+      "code":["backend/app/controls/ledger.py","backend/tests/test_controls_ledger.py"]
+    },
+    {
+      "prompt":"如果模型调用失败，已经预留的预算如何处理？",
+      "answer":"要看失败发生在哪个阶段，不能一概全部退回。当前 model_call 在调用外部模型前，如果策略变更、没取得执行槽或授权检查失败等路径能确认尚未进入调用，会以零用量结算这次预留。\n\n一旦进入供应商调用，超时或断连不证明对方没执行、没计费，异常路径会 settle(attempt_id, None)，记录为 unknown；成功但返回用量不合法时也保留未知责任。只有拿到有效实际用量才据此结算，未知责任继续影响后续额度，等待核对。执行槽能否释放与费用是否已知也是不同问题，不能用客户端报错直接触发全额退款。",
+      "code":["backend/app/controls/runtime.py","backend/app/controls/ledger.py"]
+    },
+    {
+      "prompt":"SQLAlchemy 的事务在这里起什么作用？",
+      "answer":"它组织一组数据库操作的提交与回滚，让预算检查和预留写入作为一个一致的决策完成；结算也需要独立事务处理，防止部分更新或重复结算。代码用 SQLAlchemy Connection 和事务上下文管理执行这些操作。\n\n原子性不意味着默认隔离级别自动解决所有竞争。Belay 还显式使用数据库协调锁，确保所有请求按同样规则检查和写入。事务在外部模型调用前结束，模型返回后再开结算事务，避免等待网络时长期占用锁和连接；数据库事务也无法回滚已经发生的外部费用。",
+      "code":["backend/app/controls/ledger.py","backend/app/controls/runtime.py"]
+    },
+    {
+      "prompt":"如何设计测试，验证两个并发请求不会同时成功预留同一笔预算？",
+      "answer":"我会使用独立测试 PostgreSQL，把同一预算范围设置成只够一个请求，然后启动两个独立进程，各自创建数据库连接并用不同 attempt ID 申请，最后断言恰好一个 accepted、一个 budget_exhausted。不同 ID 是为了测试额度竞争，重复 ID 的幂等性要另测。\n\n项目已有 test_postgres_two_process_reservation，使用 ProcessPoolExecutor 与独立 CONTROL_TEST_DATABASE_URL，避免误操作应用库。进一步强化时可以用屏障让两个进程同时起跑，并检查账本只有一份有效责任、重复结算不会多扣和失败路径的状态。没有配置测试数据库而跳过，不能写成并发测试已经通过；历史输出要保留对应提交和环境。",
+      "code":["backend/tests/test_controls_ledger.py","backend/app/controls/ledger.py"]
+    },
+    {
+      "prompt":"你在 Belay 的 Docker 学生代码执行部分具体做了什么？",
+      "answer":"我参与的是学生提交的 Python 代码执行沙箱。学生代码不直接在后端服务进程里运行，而是在受限容器中执行；我的相关提交包括只读文件系统、资源限制、有界输出、受限产物提取，以及超时和异常后的容器清理确认。可以结合 6c5cfe2、84d71d9、9319670 三个提交解释具体修改。\n\n执行边界包括断网、非 root、CPU / 内存 / 进程数 / 时长限制；读取输出时就限制大小，避免持续打印耗尽宿主内存。容器生成的产物也要限制路径、类型和大小，不能任意读取宿主文件。最后把受限且校验过的结果交给宿主侧评分和反馈；评分机制保留并衔接团队已有实现，不说成整个系统由我从零独立完成。\n\n验证会覆盖无限循环、超量输出、非法产物和清理失败，并核对真实容器记录。新镜像构建、gVisor 或完整平台集成，需要各自证据，不能因为 Docker 配置存在就说全部验证完成。",
+      "code":["backend/app/core/runner/_sandbox.py","backend/app/core/runner/_bounded.py","backend/app/core/runner/_artifacts.py","backend/app/core/runner/_harness.py","backend/tests/test_runner_sandbox.py","backend/tests/test_runner_boundaries.py"]
+    }
+  ]
+}

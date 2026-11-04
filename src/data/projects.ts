@@ -1,6 +1,7 @@
 import otherProjects from './other-projects.json' with {type:'json'};
 import guideData from './project-guides.json' with {type:'json'};
-import type {Project,ProjectGuide} from '../types';
+import interviewData from './project-interview-questions.json' with {type:'json'};
+import type {Project,ProjectGuide,ProjectInterviewQuestion} from '../types';
 
 const baseProjects:Project[]=[
  {id:'bloom',name:'Agency Bloom',subtitle:'Python AI 应用后端 · 独立产品设计与开发',status:'已上线',intro:'帮助用户理解自身价值、探索可能并作出自己的选择；以职业探索为首个验证场景，将产品判断落实到小程序与 Python 服务。',contributions:['FastAPI、Pydantic 与 SQLAlchemy：微信登录、探索、会话、消息和用户记忆。','异步 HTTPX 接模型，SSE 传递公开回复，最终校验后再保存。','探索与独立会话分开建模；用户确认的信息才进入记忆与卡片。','数据库条件更新预留模型预算，按实际用量结算。','产品定位、信息结构、视觉与原生小程序交互的完整实现。'],boundaries:['AI 建议不自动成为用户事实；产品方向不等于全部功能已经验证。','用户规模、留存、付费和性能结果按实际数据表达。'],evidence:['apps/api/app/main.py、models.py、schemas.py。','ai.py、chat_stream.py 与流式接入测试。','docs/PRODUCT_DIRECTION.md 与记忆确认流程演示。'],ids:['s01','c07','c06','s05','a06','b01','b05','b06','s04','a13'],note:'适合展示 Python、AI 接入、业务建模与端到端产品能力。'},
@@ -11,12 +12,13 @@ const baseProjects:Project[]=[
 
 export const mainProjectIds=['bloom','belay','somnia'];
 export const projectGuides:Record<string,ProjectGuide>=guideData;
+export const projectInterviewQuestions:Record<string,ProjectInterviewQuestion[]>=interviewData;
 const updates:Record<string,Partial<Project>>={
  belay:{
   contributions:[
    '参与学习工作区、Markdown / 代码块和引用追问，以及已保存 / 未保存会话的恢复。',
    '参与 Python / FastAPI 的会话持久化、访问控制与模型预算相关实现。',
-   '参与 Docker 代码执行沙箱，完善资源限制、有界输出、受限产物提取和容器清理。',
+   '参与学生 Python 代码的 Docker 沙箱执行，完善隔离、资源限制、超时处理、有界输出、受限产物提取和容器清理。',
    '通过个人提交和回归记录说明具体工作；结合 Provider、短事务预算与持久 worker 解释团队技术链路。'
   ],
   evidence:['backend/app/core/runner/_sandbox.py、_bounded.py、_artifacts.py。','个人提交 6c5cfe2、84d71d9、9319670 与对应测试差异。','docs/reviews/pr7-sandbox.md；恢复、权限和预算的验证记录。'],
@@ -37,5 +39,5 @@ export const projects:Project[]=[...baseProjects.map(project=>({...project,...up
 export function searchProjects(query:string):Project[] {
  const term=query.trim().toLocaleLowerCase();
  if(!term)return [];
- return projects.filter(project=>JSON.stringify([project,projectGuides[project.id]]).toLocaleLowerCase().includes(term));
+ return projects.filter(project=>JSON.stringify([project,projectGuides[project.id],projectInterviewQuestions[project.id]]).toLocaleLowerCase().includes(term));
 }

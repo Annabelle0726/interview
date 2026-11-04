@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {ArrowRight,Check,Copy,ExternalLink,MessageSquare} from 'lucide-react';
 import type {Progress,RecordState} from './types';
-import {projects,projectGuides,mainProjectIds} from './data/projects';
+import {projects,projectGuides,projectInterviewQuestions,mainProjectIds} from './data/projects';
 import {questions} from './data/catalog';
 import {blankRecord} from './learning';
 import {Emphasis} from './Emphasis';
@@ -10,6 +10,7 @@ import './project-library.css';
 export default function ProjectLibrary({selectedId,progress,onChange,onQuestion}:{selectedId:string;progress:Progress;onChange:(id:string,record:RecordState)=>void;onQuestion:(id:string,ids:string[])=>void}) {
  const project=projects.find(p=>p.id===selectedId)??projects[0];
  const guide=projectGuides[project.id];
+ const interviewQuestions=projectInterviewQuestions[project.id]??[];
  const [length,setLength]=useState<'short'|'long'>('short');
  const [practice,setPractice]=useState(false);
  const [copyState,setCopyState]=useState<'idle'|'done'|'failed'>('idle');
@@ -40,10 +41,11 @@ export default function ProjectLibrary({selectedId,progress,onChange,onQuestion}
     {practice?<div className="project-practice-prompt"><p>先自己讲一遍：这个作品解决什么问题？我负责什么？哪项实现最值得展开？现有证据能证明什么？</p><button onClick={()=>setPractice(false)}>对照介绍稿 <ArrowRight size={14}/></button></div>:<><div className="project-pitch-text">{paragraphs.map((text,i)=><p key={i}><Emphasis text={text}/></p>)}</div><button className="text-button" onClick={copyPitch}>{copyState==='done'?<Check size={14}/>:<Copy size={14}/>} {copyState==='done'?'已复制介绍稿':'复制介绍稿'}</button>{copyState==='failed'&&<p role="status" className="subtle">当前环境无法复制，请选中介绍稿手动复制。</p>}</>}
    </section>
    <section className="project-contributions"><h3>我的贡献与职责</h3><ul>{project.contributions.map(item=><li key={item}><Emphasis text={item}/></li>)}</ul></section>
+   {interviewQuestions.length>0&&<section className="project-interview-questions"><h3>高频深入追问 · {interviewQuestions.length} 题</h3><p className="subtle">先自己回答，再展开对照。回答区分当前实现、设计理由和下一步改进，可按代码位置继续准备。</p>{interviewQuestions.map((item,index)=><details className="project-detail" key={item.prompt}><summary><span>{String(index+1).padStart(2,'0')}</span>{item.prompt}</summary><div className="project-detail-body">{item.answer.split(/\n\s*\n/).map((text,i)=><p key={i}><Emphasis text={text}/></p>)}<h4>可以打开的代码或依据</h4><ul className="project-code-refs">{item.code.map(path=><li key={path}><code>{path}</code></li>)}</ul></div></details>)}</section>}
    {guide&&<>
     <section className="project-architecture"><h3>从界面到结果，技术怎样串起来</h3><ol>{guide.architecture.map(step=><li key={step.title}><h4>{step.title}</h4><p>{step.body}</p></li>)}</ol></section>
     <section className="project-cases"><h3>选一个案例，讲到实现与验证</h3><p className="subtle">根据面试官的方向展开一项，不必一次讲完所有实现。</p>{guide.cases.map((item,index)=><details className="project-detail" key={item.title}><summary><span>0{index+1}</span>{item.title}</summary><div className="project-detail-body"><dl><dt>问题出在哪里</dt><dd>{item.context}</dd><dt>我的判断与取舍</dt><dd>{item.decision}</dd></dl><h4>具体实现</h4><ul>{item.implementation.map(text=><li key={text}>{text}</li>)}</ul><h4>怎样验证与解释结果</h4><p>{item.validation}</p><h4>打开这些代码或记录</h4><ul className="project-code-refs">{item.code.map(path=><li key={path}><code>{path}</code></li>)}</ul>{item.commits&&<><h4>可沿个人提交展开</h4><ul>{item.commits.map(commit=><li key={commit}>{commit}</li>)}</ul></>}</div></details>)}</section>
-    <section className="project-followups"><h3>面试官继续追问</h3>{guide.followups.map(item=><details className="project-detail" key={item.prompt}><summary>{item.prompt}</summary><div className="project-detail-body"><p>{item.answer}</p></div></details>)}</section>
+    <section className="project-followups"><h3>补充追问</h3>{guide.followups.map(item=><details className="project-detail" key={item.prompt}><summary>{item.prompt}</summary><div className="project-detail-body"><p>{item.answer}</p></div></details>)}</section>
    </>}
    <section className="project-demo"><h3>面试演示顺序</h3><ol>{demo.map(text=><li key={text}>{text}</li>)}</ol></section>
    <details className="project-detail project-evidence"><summary>源码依据、表达边界与准备材料</summary><div className="project-detail-body"><h4>准备这些证据</h4><ul>{project.evidence.map(text=><li key={text}>{text}</li>)}</ul><h4>需要讲清的边界</h4><ul>{project.boundaries.map(text=><li key={text}>{text}</li>)}</ul><p>{project.note}</p><p className="subtle">内容核对：2026-11-04。这里是面试准备材料，原项目的测试、部署和真实模型效果应按各自记录说明。</p></div></details>
