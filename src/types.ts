@@ -4,3 +4,5 @@ export type Question={id:string;title:string;category:string;priority:Priority;s
 export type RecordState={status:'new'|'review'|'mastered';starred:boolean;note:string;answerDraft?:string};
 export type Progress={version:1;records:Record<string,RecordState>;signature:string};
 export type Filters={query?:string;category?:string;priority?:string;mode?:string};
+export type Project={id:string;name:string;subtitle:string;status:string;intro:string;contributions:string[];boundaries:string[];evidence:string[];ids:string[];note:string;pitch?:string;demo?:string[];links?:{title:string;url:string}[]};
+export type ProjectGuide={overview:string;pitch:{short:string[];long:string[]};architecture:{title:string;body:string}[];cases:{title:string;context:string;decision:string;implementation:string[];validation:string;code:string[];commits?:string[]}[];followups:{prompt:string;answer:string}[];demo:string[];links:{title:string;url:string}[]};

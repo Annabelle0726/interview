@@ -2,6 +2,8 @@
 
 核对日期：2026-11-02。用于准备能继续追问到代码的回答。Python 主线是 Agency Bloom 与 Belay；Somnia Library 补充全栈数据接入、认证和 UX/UI。
 
+2026-11-04 补充：三份完整口述、Docker 沙箱个人提交与其他作品的最新核对记录见 [作品介绍与面试材料](project-dossiers.md)。这里保留原核对日期，避免把历史测试结果当作本次实测。
+
 ## Agency Bloom
 
 本地仓库：`C:/Projects/Agency-Bloom`。本人独立推进项目的范围依据本人说明；以下是本次实际阅读的代码与设计材料。
