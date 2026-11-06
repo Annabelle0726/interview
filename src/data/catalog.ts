@@ -4,6 +4,7 @@ import fullstack from './fullstack.json';
 import spokenAnswers from './spoken-answers.json';
 import vibeCoding from './vibe-coding.json';
 import recentQa from './recent-qa.json';
+import frontendQa from './frontend-qa.json';
 import type {Block, Question} from '../types';
 
 const answers: Record<string, Pick<Question, 'spoken' | 'followups'> & {links?: Question['links'];attention?:string}> = spokenAnswers;
@@ -14,7 +15,7 @@ const coreQuestions: Question[] = [...supplement, ...imported, ...fullstack].map
  return {...source, ...answer, priority: source.priority as Question['priority'], blocks: examples,
   links: [...source.links, ...(answer.links ?? [])]};
 });
-export const questions: Question[] = [...coreQuestions,...[...vibeCoding,...recentQa].map(q=>({...q,priority:q.priority as Question['priority'],blocks:q.blocks as Block[]}))];
+export const questions: Question[] = [...coreQuestions,...[...vibeCoding,...recentQa,...frontendQa].map(q=>({...q,priority:q.priority as Question['priority'],blocks:q.blocks as Block[]}))];
 export const categories=[
  {id:'intro',name:'自我介绍',hint:'按岗位表达自己的优势'},
  {id:'product',name:'业务与产品判断',hint:'问题、取舍和验证'},
@@ -31,6 +32,7 @@ export const categories=[
 ];
 export const priorities={P0:{label:'优先准备',description:'川下核心筛选条件，或可证明个人能力的关键案例。'},P1:{label:'需要讲清',description:'常见追问与已有经历，理解后用例子回答。'},P2:{label:'了解即可',description:'当前岗位加分或次要内容，不挤占 Python 与项目准备时间。'}};
 export const routes=[
+ {title:'11.06 · 小程序前端 / 六只猫',time:'50 分钟',detail:'前端自我介绍与 13 道岗位模拟：Vue、uni-app、接口、登录、页面交互、真机排错与远程交付。',ids:["fe00", "fe01", "fe02", "fe03", "fe04", "fe05", "fe06", "fe07", "fe08", "fe09", "fe10", "fe11", "fe12", "fe13"]},
  {title:'Vibe Coding · 简历与实战',time:'30 分钟',detail:'先把 HR 要看的 Python 与 Vibe Coding 写进简历，再练 Agent 派工、Skills 和工程方法。',ids:['v01','s01','v02','v03','v04','v06']},
  {title:'11.03 · AI 应用与前端场景',time:'35 分钟',detail:'6 道面经改写模拟：数据校验、身份权限、断流恢复、分页、防重与远程交付；配套 3 个小练习。',ids:['n01','n02','n03','n04','n05','n06']},
  {title:'01 · 先把自己讲清楚',time:'20 分钟',detail:'用 Python 项目介绍自己，再讲后端实现和 AI 协作方法。',ids:['s01','s20','c07','s04']},

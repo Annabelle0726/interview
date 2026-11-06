@@ -14,9 +14,16 @@ export const mainProjectIds=['bloom','belay','somnia'];
 export const projectGuides:Record<string,ProjectGuide>=guideData;
 export const projectInterviewQuestions:Record<string,ProjectInterviewQuestion[]>=interviewData;
 const updates:Record<string,Partial<Project>>={
+ bloom:{
+  subtitle:'Vue / uni-app 小程序 · Python AI 应用 · 独立设计与开发',
+  contributions:[...baseProjects[0].contributions,'前端使用 Vue 3、TypeScript、uni-app，拆分输入、消息、Markdown 与卡片组件，处理流式回复阶段和微信端适配。'],
+  note:'可以按岗位选择前端或 Python 主线：前端讲组件、状态、接口联调与交互判断，后端讲业务模型和 AI 接入。'
+ },
  belay:{
+  subtitle:'学习工作区前端 · Python 服务 · 团队协作开发',
   contributions:[
    '参与学习工作区、Markdown / 代码块和引用追问，以及已保存 / 未保存会话的恢复。',
+   '结合 HTML、CSS 和 JavaScript 模块，说明内容展示、草稿、会话与请求生命周期怎样衔接；团队实现与个人改动分别表达。',
    '参与 Python / FastAPI 的会话持久化、访问控制与模型预算相关实现。',
    '参与学生 Python 代码的 Docker 沙箱执行，完善隔离、资源限制、超时处理、有界输出、受限产物提取和容器清理。',
    '通过个人提交和回归记录说明具体工作；结合 Provider、短事务预算与持久 worker 解释团队技术链路。'
@@ -26,7 +33,7 @@ const updates:Record<string,Partial<Project>>={
  },
  somnia:{
   subtitle:'React / Supabase 阅读应用 · 二次开发',
-  contributions:['参与首页、书籍界面与认证流程改进，衔接书籍发现、账户访问和个人书库。','调整书封、书名和卡片信息层级，以及搜索、收藏、添加和导航入口。','用作品界面、交互演示与个人 diff 说明具体修改；原系统认证和 Supabase 链路在技术案例中展开。'],
+  contributions:['参与首页、书籍界面与认证流程改进，衔接书籍发现、账户访问和个人书库。','调整书封、书名和卡片信息层级，以及搜索、收藏、添加和导航入口。','结合 React / TypeScript 的组件、筛选排序、分页与弹窗状态，解释 Supabase 数据如何组合到书库页面。','用作品界面、交互演示与个人 diff 说明具体修改；原系统认证和 Supabase 链路在技术案例中展开。'],
   note:'三个主项目之一；展示前端、账户流程和数据接入。Python 重点使用 Bloom 和 Belay。'
  },
  wenruo:{

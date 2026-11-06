@@ -8,7 +8,7 @@ function readData(name:string) {
 }
 
 test('every question has its own spoken answer and replies to every original follow-up',()=>{
- const additions=[...readData('vibe-coding'),...readData('recent-qa')];
+ const additions=[...readData('vibe-coding'),...readData('recent-qa'),...readData('frontend-qa')];
  const cards=[...readData('questions'),...readData('supplement'),...readData('fullstack'),...additions];
  const answers={...readData('spoken-answers'),...Object.fromEntries(additions.map((card:{id:string})=>[card.id,card]))};
  assert.equal(new Set(cards.map(card=>card.id)).size,cards.length);
