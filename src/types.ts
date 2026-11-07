@@ -1,7 +1,7 @@
 export type Priority='P0'|'P1'|'P2';
 export type Block={type:'p'|'code'|'table';text?:string;rows?:string[][]};
 export type Question={id:string;title:string;category:string;priority:Priority;summary:string;focus:string[];blocks:Block[];spoken:string[];followups:{prompt:string;answer:string;code?:string}[];boundary:string;source:string;originalRef?:string;tags:string[];links:{title:string;url:string}[];attention?:string};
-export type RecordState={status:'new'|'review'|'mastered';starred:boolean;note:string;answerDraft?:string};
+export type RecordState={status:'new'|'review'|'mastered';starred:boolean;note:string;answerDraft?:string;projectDraft?:Record<string,string>};
 export type Progress={version:1;records:Record<string,RecordState>;signature:string};
 export type Filters={query?:string;category?:string;priority?:string;mode?:string};
 export type Project={id:string;name:string;subtitle:string;status:string;intro:string;contributions:string[];boundaries:string[];evidence:string[];ids:string[];note:string;pitch?:string;demo?:string[];links?:{title:string;url:string}[]};

@@ -6,18 +6,22 @@ import {questions} from './data/catalog';
 import {blankRecord} from './learning';
 import {Emphasis} from './Emphasis';
 import './project-library.css';
+import ProjectEditor,{applyProjectDraft} from './ProjectEditor';
 
 export default function ProjectLibrary({selectedId,progress,onChange,onQuestion}:{selectedId:string;progress:Progress;onChange:(id:string,record:RecordState)=>void;onQuestion:(id:string,ids:string[])=>void}) {
- const project=projects.find(p=>p.id===selectedId)??projects[0];
- const guide=projectGuides[project.id];
- const interviewQuestions=projectInterviewQuestions[project.id]??[];
+ const original=projects.find(p=>p.id===selectedId)??projects[0];
+ const noteId='project-'+original.id;
+ const draft=progress.records[noteId]?.projectDraft??{};
+ const source={project:original,guide:projectGuides[original.id],interviewQuestions:projectInterviewQuestions[original.id]??[]};
+ const {project,guide,interviewQuestions}=applyProjectDraft(source,draft);
+ const [editingId,setEditingId]=useState('');
  const [length,setLength]=useState<'short'|'long'>('short');
  const [practice,setPractice]=useState(false);
  const [copyState,setCopyState]=useState<'idle'|'done'|'failed'>('idle');
  const paragraphs=guide?guide.pitch[length]:[project.pitch??project.intro+' '+project.contributions.join(' ')];
  const links=guide?.links??project.links??[];
  const demo=guide?.demo??project.demo??['准备一个个人改动的前后对比和对应验证记录。','补充项目暂停的真实原因与可分享范围，再开始面试演练。'];
- const noteId='project-'+project.id;
+ function updateDraft(projectDraft:Record<string,string>){onChange(noteId,{...(progress.records[noteId]??blankRecord()),projectDraft});}
  async function copyPitch() {
   try {await navigator.clipboard.writeText(paragraphs.join('\n\n'));setCopyState('done');}
   catch {setCopyState('failed');}
@@ -32,6 +36,8 @@ export default function ProjectLibrary({selectedId,progress,onChange,onQuestion}
   <nav className="other-project-picker" aria-label="其他作品"><span>其他作品</span>{projects.filter(p=>!mainProjectIds.includes(p.id)).map(p=><a key={p.id} href={'#project:'+p.id} aria-current={p.id===project.id?'page':undefined}>{p.name}</a>)}</nav>
   <article className="project-card project-dossier" id={'project-'+project.id}>
    <header className="section-title"><div><h2>{project.name}</h2><p>{project.subtitle}</p></div><span className="badge neutral">{project.status}</span></header>
+   <button onClick={()=>setEditingId(editingId===project.id?'':project.id)} aria-expanded={editingId===project.id}>{editingId===project.id?'收起编辑':'编辑项目内容'}</button>
+   {editingId===project.id&&<ProjectEditor key={project.id} source={source} draft={draft} onChange={updateDraft} onDone={()=>setEditingId('')}/>}
    <p className="project-intro">{project.intro}</p>
    {links.length>0&&<div className="project-external-links">{links.map(link=><a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.title}<ExternalLink size={14}/></a>)}</div>}
    {guide&&<p className="project-orientation">{guide.overview}</p>}

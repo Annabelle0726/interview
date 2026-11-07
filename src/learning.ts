@@ -26,6 +26,12 @@ export function parseBackup(s:string,_ids:string[]=[]):Progress{
   if(r.answerDraft!==undefined && (typeof r.answerDraft!=='string' || r.answerDraft.length>50000))throw new Error('口述稿格式有误，未导入。');
   records[id]={status:r.status,starred:r.starred,note:r.note};
   if(r.answerDraft?.trim())records[id].answerDraft=r.answerDraft;
+  if(r.projectDraft!==undefined){
+   const draft=r.projectDraft;
+   if(!draft||typeof draft!=='object'||Array.isArray(draft)||Object.keys(draft).length>1000||JSON.stringify(draft).length>1_000_000)throw new Error('项目编辑内容格式有误，未导入。');
+   for(const [key,text] of Object.entries(draft))if(key.length>200||key.split('.').some(part=>['__proto__','constructor','prototype'].includes(part))||typeof text!=='string'||text.length>50000)throw new Error('项目编辑内容格式有误，未导入。');
+   records[id].projectDraft={...draft};
+  }
  }
  const signature=v.signature??'';
  if(typeof signature!=='string'||signature.length>2_000_000||(signature&&!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=\r\n]+$/.test(signature)))throw new Error('签名图片格式无效。');
